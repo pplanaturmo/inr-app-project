@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pplanaturmo.inrappproject.dto.CreateUserRequest;
 import com.pplanaturmo.inrappproject.model.User;
 import com.pplanaturmo.inrappproject.service.UserService;
 
@@ -25,10 +26,31 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // @PostMapping
+    // public User createUser(@Valid @RequestBody User user) {
+    //     return userService.createUser(user);
+    // }
+
     @PostMapping
-    public User createUser(@Valid @RequestBody User user) {
+    public User createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
+        User user = convertToUser(createUserRequest);
         return userService.createUser(user);
     }
+
+    private User convertToUser(CreateUserRequest createUserRequest) {
+        User user = new User();
+        
+        user.setName(createUserRequest.getName());
+        user.setSurname(createUserRequest.getSurname());
+        user.setIdCard(createUserRequest.getIdCard());
+        user.setHealthCard(createUserRequest.getHealthCard());
+        user.setEmail(createUserRequest.getEmail());
+        user.setPhone(createUserRequest.getPhone());
+        user.setDataConsent(createUserRequest.getDataConsent());
+        user.setPassword(createUserRequest.getPassword()); 
+        return user;
+    }
+
 
     @GetMapping
     public List<User> getAllUsers() {
