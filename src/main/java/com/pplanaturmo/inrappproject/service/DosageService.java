@@ -1,0 +1,69 @@
+package com.pplanaturmo.inrappproject.service;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.pplanaturmo.inrappproject.model.Dosage;
+import com.pplanaturmo.inrappproject.model.Measurement;
+import com.pplanaturmo.inrappproject.repository.DosageRepository;
+import com.pplanaturmo.inrappproject.repository.MeasurementRepository;
+
+import jakarta.transaction.Transactional;
+
+@Service
+@Transactional
+public class DosageService {
+
+    @Autowired
+    private DosageRepository dosageRepository;
+
+    
+    @Autowired
+    private MeasurementRepository measurementRepository; // Assuming you have a MeasurementRepository
+
+     public Dosage createDosage(Dosage dosage) {
+        return dosageRepository.save(dosage);
+    }
+
+   
+    
+    public Dosage getDosageById(Long id) {
+        return dosageRepository.findById(id).orElse(null);
+    }
+    
+    public Dosage updateDosage(Dosage dosage) {
+        return dosageRepository.save(dosage);
+    }
+    
+    public void deleteDosage(Long id) {
+        dosageRepository.deleteById(id);
+    }
+    
+
+    
+    public List<Dosage> getAllDosagesByUser(Long userId) {
+        List<Measurement> measurements = measurementRepository.findByUserId(userId);
+
+        List<Dosage> dosages = new ArrayList<>();
+
+       for (Measurement measurement : measurements) {
+            List<Dosage> dosagesForMeasurement = dosageRepository.findByMeasurement(measurement);
+            dosages.addAll(dosagesForMeasurement);
+        }
+
+        return dosages;
+    }
+
+    public List<Dosage> getDosageByDate(Date doseDate) {
+        return dosageRepository.findByDoseDate(doseDate);
+    }
+
+    public List<Dosage> getDosagesBetweenDates(Date startDate, Date endDate) {
+        return dosageRepository.findByDoseDateBetween(startDate, endDate);
+    }
+
+}
