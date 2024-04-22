@@ -1,4 +1,5 @@
 package com.pplanaturmo.inrappproject.model;
+
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -17,8 +17,6 @@ public class ExpectedMeasurementDateService {
     @Autowired
     private ExpectedMeasurementDateRepository expectedMeasurementDateRepository;
 
-    
-
     public ExpectedMeasurementDate save(ExpectedMeasurementDate expectedMeasurementDate) {
         return expectedMeasurementDateRepository.save(expectedMeasurementDate);
     }
@@ -38,10 +36,6 @@ public class ExpectedMeasurementDateService {
     public void deleteById(Long id) {
         expectedMeasurementDateRepository.deleteById(id);
     }
-
-
-
-    
 
     public List<ExpectedMeasurementDate> findByUserId(Long userId) {
         return expectedMeasurementDateRepository.findByUserId(userId);
