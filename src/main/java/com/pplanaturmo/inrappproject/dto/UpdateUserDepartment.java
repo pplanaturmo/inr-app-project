@@ -1,20 +1,26 @@
 package com.pplanaturmo.inrappproject.dto;
 
 import org.springframework.format.annotation.NumberFormat;
-import org.springframework.web.bind.annotation.PathVariable;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
-    @NotNull
+public class UpdateUserDepartment {
+
     @NumberFormat
+    @NotNull
+    @NotBlank
     private Long userId;
 
-    public UserDto(@PathVariable Long userId) {
-        this.userId = userId;
-    }
+    @NumberFormat
+    @NotNull
+    @NotBlank
+    private Long departmentId;
+
 }

@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pplanaturmo.inrappproject.dto.CreateUserRequest;
+import com.pplanaturmo.inrappproject.dto.UserRequest;
+import com.pplanaturmo.inrappproject.dto.UpdateUserDepartment;
+import com.pplanaturmo.inrappproject.dto.UpdateUserSupervisor;
 import com.pplanaturmo.inrappproject.model.User;
 import com.pplanaturmo.inrappproject.service.UserService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/user")
@@ -26,18 +29,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // @PostMapping
-    // public User createUser(@Valid @RequestBody User user) {
-    //     return userService.createUser(user);
-    // }
-
-    @PostMapping
-    public User createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
+    @PostMapping("/create")
+    public User createUser(@Valid @RequestBody UserRequest createUserRequest) {
         User user = convertToUser(createUserRequest);
         return userService.createUser(user);
     }
 
-    private User convertToUser(CreateUserRequest createUserRequest) {
+    private User convertToUser(UserRequest createUserRequest) {
         User user = new User();
         
         user.setName(createUserRequest.getName());
@@ -52,30 +50,44 @@ public class UserController {
     }
 
 
-    @GetMapping
+    @GetMapping("/")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    @GetMapping("/{userId}")
+    public User getUserById(@PathVariable("userId") @Valid @NotNull Long userId) {
+        return userService.getUserById(userId);
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+    @PutMapping("/{userId}")
+    public User updateUser(@PathVariable("userId") @Valid @NotNull Long userId ,@Valid @RequestBody UserRequest createUserRequest) {
 
-        user.setId(id); 
-        return userService.updateUser(user);
+        User user = convertToUser(createUserRequest);
+        user.setId(null);
+          return userService.updateUser(user);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    @PutMapping("/{userId}/department")
+    public User assignDepartmentToUser(@PathVariable("userId") @Valid @NotNull Long userId, @RequestBody @Valid UpdateUserDepartment updateUserDepartment) {
+        Long departmentId = updateUserDepartment.getDepartmentId();
+        return userService.assignDepartmentToUser(userId, departmentId);
     }
+
+    @PutMapping("/{userId}/supervisor")
+    public User assignSupervisorToUser(@PathVariable("userId") @Valid @NotNull Long userId, @RequestBody @Valid UpdateUserSupervisor updateUserSupervisor) {
+        Long professionalId = updateUserSupervisor.getProfessionalId();
+        return userService.assignDepartmentToUser(userId, professionalId);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@Valid @PathVariable("userId") @NotNull Long userId) {
+        userService.deleteUser(userId);
+    }
+
 
     @GetMapping("/department/{departmentId}")
-    public List<User> getUsersByDepartmentId(@PathVariable Long departmentId) {
+    public List<User> getUsersByDepartmentId(@Valid @PathVariable("userId") @NotNull Long departmentId) {
         return userService.getUsersByDepartmentId(departmentId);
     }
 

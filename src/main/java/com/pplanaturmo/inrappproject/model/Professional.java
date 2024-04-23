@@ -3,8 +3,11 @@ import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @AllArgsConstructor
@@ -25,15 +28,22 @@ public class Professional {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private Type type;
+    private TypeEnum type;
 
-    @Column(name = "timestamp", nullable = false)
-    private Timestamp timestamp;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at", nullable = false)
+    private Date updatedAt;
 
     @OneToMany(mappedBy = "supervisor", cascade = CascadeType.ALL)
     private List<User> supervisedUsers;
     
-    public enum Type {
+    public enum TypeEnum {
         MEDIC,
         NURSE
     }

@@ -3,7 +3,10 @@ import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @AllArgsConstructor
@@ -25,7 +28,7 @@ public class Observation {
     private Measurement measurement;
 
     @Column(name = "date", nullable = false)
-    private Timestamp date;
+    private Date date;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "cause", nullable = false)
@@ -34,8 +37,15 @@ public class Observation {
     @Column(name = "description", nullable = false, columnDefinition = "LONGTEXT")
     private String description;
 
-    @Column(name = "timestamp", nullable = false)
-    private Timestamp timestamp;
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at", nullable = false)
+    private Date updatedAt;
 
     public enum Cause {
         NO_DOSE,

@@ -20,24 +20,24 @@ public class ProfessionalService {
     private ProfessionalRepository professionalRepository;
 
      
-     public Professional createObservation(Professional professional) {
+     public Professional createProfessional(Professional professional) {
         return professionalRepository.save(professional);
     }
 
    
-    public List<Professional> getAllObservations() {
+    public List<Professional> getAllProfessionals() {
         return professionalRepository.findAll();
     }
 
-    public Professional getObservationById(Long id) {
+    public Professional getProfessionalById(Long id) {
         return professionalRepository.findById(id).orElse(null);
     }
 
-    public Professional updateObservation(Professional professional) {
+    public Professional updateProfessional(Professional professional) {
         return professionalRepository.save(professional);
     }
 
-    public void deleteObservation(Long id) {
+    public void deleteProfessional(Long id) {
         professionalRepository.deleteById(id);
     }
 
