@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pplanaturmo.inrappproject.model.Department;
+import com.pplanaturmo.inrappproject.model.Professional;
 import com.pplanaturmo.inrappproject.repository.DepartmentRepository;
+import com.pplanaturmo.inrappproject.repository.ProfessionalRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -19,7 +22,9 @@ public class DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    
+    @Autowired
+    private ProfessionalRepository professionalRepository;
+
     public Department saveDepartment(Department department) {
         return departmentRepository.save(department);
     }
@@ -36,6 +41,25 @@ public class DepartmentService {
 
     public Department updateDepartment(Department user) {
         return departmentRepository.save(user);
+    }
+
+    
+    public Department assignManagerToDepartment(Long departmentId, Long professionalId) {
+      
+                Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Department not found with id: " + departmentId));
+    
+
+        if(professionalId == -1){
+            department.setProfessional(null);
+        }else{
+
+            Professional professional = professionalRepository.findById(professionalId)
+                    .orElseThrow(() -> new EntityNotFoundException("Professional not found with id: " + professionalId));
+            department.setProfessional(professional);
+        }        
+        
+        return departmentRepository.save(department);
     }
 
     public void deleteDepartmentById(Long id) {

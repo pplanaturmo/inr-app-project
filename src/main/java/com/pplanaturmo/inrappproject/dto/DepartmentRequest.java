@@ -1,7 +1,5 @@
 package com.pplanaturmo.inrappproject.dto;
 
-import org.springframework.format.annotation.NumberFormat;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,16 +9,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserDepartment {
+public class DepartmentRequest {
 
-    @NumberFormat
     @NotNull
-    @NotBlank(message = "User id is required")
-    private Long userId;
+    @NotBlank(message = "Department name is required")
+    private String name;
 
-    @NumberFormat
     @NotNull
-    @NotBlank(message = "Departmentid is required")
-    private Long departmentId;
+    @NotBlank(message = "Department city is required")
+    private String city;
 
 }

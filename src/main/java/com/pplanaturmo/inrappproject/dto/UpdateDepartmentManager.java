@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateUserDepartment {
+public class UpdateDepartmentManager {
 
     @NumberFormat
     @NotNull
@@ -21,6 +21,6 @@ public class UpdateUserDepartment {
     @NumberFormat
     @NotNull
     @NotBlank(message = "Departmentid is required")
-    private Long departmentId;
+    private Long managerId;
 
 }
