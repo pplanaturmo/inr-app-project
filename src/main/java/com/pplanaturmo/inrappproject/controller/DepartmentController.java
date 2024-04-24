@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pplanaturmo.inrappproject.dto.DepartmentRequest;
 import com.pplanaturmo.inrappproject.dto.UpdateDepartmentManager;
 import com.pplanaturmo.inrappproject.model.Department;
-import com.pplanaturmo.inrappproject.model.Professional;
 import com.pplanaturmo.inrappproject.service.DepartmentService;
 
 import jakarta.validation.Valid;

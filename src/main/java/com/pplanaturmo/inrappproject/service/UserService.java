@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import com.pplanaturmo.inrappproject.exceptions.AlreadyExistsException;
 import com.pplanaturmo.inrappproject.model.Department;
 import com.pplanaturmo.inrappproject.model.Professional;
 import com.pplanaturmo.inrappproject.model.User;
@@ -35,9 +36,28 @@ public class UserService {
     private BCryptPasswordEncoder passwordEncoder;
     
     public User createUser(User user) {
+        validateUniqueFields(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
+
+    private void validateUniqueFields(User user) {
+      // Check if email already exists for a different user
+      if (user.getEmail() != null && userRepository.existsByEmailAndIdNot(user.getEmail(), user.getId())) {
+        throw new AlreadyExistsException("Email already exists: " + user.getEmail());
+    }
+
+    // Check if idCard already exists for a different user
+    if (user.getIdCard() != null && userRepository.existsByIdCardAndIdNot(user.getIdCard(), user.getId())) {
+        throw new AlreadyExistsException("ID card already exists: " + user.getIdCard());
+    }
+
+    // Check if healthCard already exists for a different user
+    if (user.getHealthCard() != null && userRepository.existsByHealthCardAndIdNot(user.getHealthCard(), user.getId())) {
+        throw new AlreadyExistsException("Health card already exists: " + user.getHealthCard());
+    }
+    }
+
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -48,6 +68,7 @@ public class UserService {
     }
 
     public User updateUser(User user) {
+        validateUniqueFields(user);
         return userRepository.save(user);
     }
 

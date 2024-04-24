@@ -24,7 +24,7 @@ import jakarta.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ProfessionalRequest {
 
-    @NotNull
+    @NotNull(message = "Register number is required")
     @NotBlank(message = "Register number is required")
     private String registerNumber;
 

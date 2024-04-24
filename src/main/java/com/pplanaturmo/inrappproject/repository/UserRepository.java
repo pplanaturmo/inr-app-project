@@ -12,4 +12,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
    
     List<User> findByDepartmentId(Long departmentId);
     
+    boolean existsByEmailAndIdNot(String email,Long id);
+    
+    boolean existsByIdCardAndIdNot(String idCard,Long id);
+    
+    boolean existsByHealthCardAndIdNot(String healthCard,Long id);
+
 }
