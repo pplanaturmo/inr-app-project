@@ -23,11 +23,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @NoArgsConstructor
 public class UpdateUserRole {
 
-    @NotNull
+    @NotNull(message = "User id is required")
     private Long userId;
 
-    @UserRoleValue
-    @NotBlank
+    @UserRoleValue(message = "Invalid role value")
+    @NotBlank(message = "Role is required")
     private String assignedRole;
 
     @Constraint(validatedBy = UserRoleValidator.class)

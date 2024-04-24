@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 public class UpdateDepartmentManager {
 
     @NumberFormat
-    @NotNull
+    @NotNull(message = "User id is required")
     @NotBlank(message = "User id is required")
     private Long userId;
 
     @NumberFormat
-    @NotNull
-    @NotBlank(message = "Departmentid is required")
+    @NotNull(message = "Manager id is required")
+    @NotBlank(message = "Manager id is required")
     private Long managerId;
 
 }

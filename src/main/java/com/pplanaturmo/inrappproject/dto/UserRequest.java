@@ -15,24 +15,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRequest {
 
-    @NotNull(message = "Register number is required")
+    @NotNull(message = "Password is required")
     @Size(min = 8, max = 20, message = "La contraseña debe tener entre 8 y 20 caracteres")
     private String password;
 
-    @NotNull(message = "Register number is required")
-    @NotBlank(message = "Register number is required")
+    @NotNull(message = "Name is required")
+    @NotBlank(message = "Name is required")
     private String name;
 
-    @NotNull(message = "Register number is required")
-    @NotBlank(message = "Register number is required")
+    @NotNull(message = "Surname/s is required")
+    @NotBlank(message = "Surname/s is required")
     private String surname;
 
-    @NotNull(message = "Register number is required")
-    @NotBlank(message = "Register number is required")
+    @NotNull(message = "Id card field is required")
+    @NotBlank(message = "Id card field is required")
     private String idCard;
 
-    @NotNull(message = "Register number is required")
-    @NotBlank(message = "Register number is required")
+    @NotNull(message = "Health card is required")
+    @NotBlank(message = "Health card is required")
     private String healthCard;
 
     @NotNull(message = "Email is required")

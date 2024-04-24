@@ -17,15 +17,15 @@ public class DosageRequest {
 
     @NumberFormat
     @NotNull(message = "Measurement number is required")
-    @NotBlank
+    @NotBlank(message = "Measurement number is required")
     private Long measurementId;
 
     @NotNull(message = "Date is required")
-    @NotBlank
+    @NotBlank(message = "Date is required")
     private Date doseDate;
 
     @NotNull(message = "Taken value is required")
-    @NotBlank
+    @NotBlank(message = "Taken value is required")
     private Boolean taken;
 
 }

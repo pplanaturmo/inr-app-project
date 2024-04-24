@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 public class UpdateUserSupervisor {
 
     @NumberFormat
-    @NotNull
-    @NotBlank
+    @NotNull(message = "User id is required")
+    @NotBlank(message = "User id is required")
     private Long userId;
 
     @NumberFormat
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Professional Id is required")
+    @NotBlank(message = "Professional Id is required")
     private Long professionalId;
 
 }
