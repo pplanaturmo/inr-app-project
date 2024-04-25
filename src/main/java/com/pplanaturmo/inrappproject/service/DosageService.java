@@ -21,36 +21,31 @@ public class DosageService {
     @Autowired
     private DosageRepository dosageRepository;
 
-    
     @Autowired
-    private MeasurementRepository measurementRepository; // Assuming you have a MeasurementRepository
+    private MeasurementRepository measurementRepository;
 
-     public Dosage createDosage(Dosage dosage) {
+    public Dosage createDosage(Dosage dosage) {
         return dosageRepository.save(dosage);
     }
 
-   
-    
     public Dosage getDosageById(Long id) {
         return dosageRepository.findById(id).orElse(null);
     }
-    
+
     public Dosage updateDosage(Dosage dosage) {
         return dosageRepository.save(dosage);
     }
-    
+
     public void deleteDosage(Long id) {
         dosageRepository.deleteById(id);
     }
-    
 
-    
     public List<Dosage> getAllDosagesByUser(Long userId) {
         List<Measurement> measurements = measurementRepository.findByUserId(userId);
 
         List<Dosage> dosages = new ArrayList<>();
 
-       for (Measurement measurement : measurements) {
+        for (Measurement measurement : measurements) {
             List<Dosage> dosagesForMeasurement = dosageRepository.findByMeasurement(measurement);
             dosages.addAll(dosagesForMeasurement);
         }
@@ -58,12 +53,33 @@ public class DosageService {
         return dosages;
     }
 
-    public List<Dosage> getDosageByDate(Date doseDate) {
-        return dosageRepository.findByDoseDate(doseDate);
+    public List<Dosage> getDosageByDate(Long userId, Date doseDate) {
+        List<Measurement> measurements = measurementRepository.findByUserId(userId);
+        List<Dosage> dosagesForDate = new ArrayList<>();
+
+        for (Measurement measurement : measurements) {
+
+            List<Dosage> dosages = dosageRepository.findByMeasurementAndDoseDate(measurement, doseDate);
+
+            dosagesForDate.addAll(dosages);
+        }
+
+        return dosagesForDate;
     }
 
-    public List<Dosage> getDosagesBetweenDates(Date startDate, Date endDate) {
-        return dosageRepository.findByDoseDateBetween(startDate, endDate);
+    public List<Dosage> getDosagesBetweenDates(Long userId, Date startDate, Date endDate) {
+
+        List<Measurement> measurements = measurementRepository.findByUserId(userId);
+
+        List<Dosage> dosages = new ArrayList<>();
+
+        for (Measurement measurement : measurements) {
+            List<Dosage> dosagesForMeasurement = dosageRepository.findByMeasurementAndDoseDateBetween(measurement,
+                    startDate, endDate);
+            dosages.addAll(dosagesForMeasurement);
+        }
+
+        return dosages;
     }
 
 }
