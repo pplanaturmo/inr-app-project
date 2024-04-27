@@ -35,7 +35,7 @@ public class DosageController {
     private Dosage convertToDosage(DosageRequest dosageRequest) {
         Dosage dosage = new Dosage();
         
-        dosage.setMeasurementId(dosageRequest.getMeasurementId());
+        // dosage.setMeasurementId(dosageRequest.getMeasurementId());
         dosage.setDoseDate(dosageRequest.getDoseDate());
         dosage.setTaken(dosageRequest.getTaken());
         return dosage;

@@ -54,6 +54,10 @@ public class User {
     @Column(name = "data_consent", nullable = false)
     private Boolean dataConsent;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ranges_inr", referencedColumnName = "id")
+    private RangeInr rangeInr;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -76,4 +80,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Role> roles;
 
+    
+
+    public enum BotLevel {
+        PATIENT,
+        PROFESSIONAL,
+        MANAGER,
+        ADMIN
+    }
 }

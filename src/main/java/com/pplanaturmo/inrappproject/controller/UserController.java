@@ -80,6 +80,12 @@ public class UserController {
         return userService.assignDepartmentToUser(userId, professionalId);
     }
 
+    @PutMapping("/{userId}/supervisor")
+    public User set(@PathVariable("userId") @Valid @NotNull Long userId, @RequestBody @Valid UpdateUserSupervisor updateUserSupervisor) {
+        Long professionalId = updateUserSupervisor.getProfessionalId();
+        return userService.assignDepartmentToUser(userId, professionalId);
+    }
+
     @DeleteMapping("/{userId}")
     public void deleteUser(@Valid @PathVariable("userId") @NotNull Long userId) {
         userService.deleteUser(userId);

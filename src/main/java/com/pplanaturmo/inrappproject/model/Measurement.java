@@ -27,7 +27,7 @@ public class Measurement {
     private Date date;
 
     @Column(name = "value", nullable = false)
-    private Integer value;
+    private Double value;
 
     @Column(name = "recomended_level", nullable = false)
     private Integer recommendedLevel;

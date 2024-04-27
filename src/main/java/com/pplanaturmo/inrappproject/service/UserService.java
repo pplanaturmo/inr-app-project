@@ -10,9 +10,11 @@ import org.springframework.validation.annotation.Validated;
 import com.pplanaturmo.inrappproject.exceptions.AlreadyExistsException;
 import com.pplanaturmo.inrappproject.model.Department;
 import com.pplanaturmo.inrappproject.model.Professional;
+import com.pplanaturmo.inrappproject.model.RangeInr;
 import com.pplanaturmo.inrappproject.model.User;
 import com.pplanaturmo.inrappproject.repository.DepartmentRepository;
 import com.pplanaturmo.inrappproject.repository.ProfessionalRepository;
+import com.pplanaturmo.inrappproject.repository.RangeInrRepository;
 import com.pplanaturmo.inrappproject.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -31,6 +33,10 @@ public class UserService {
     
     @Autowired
     private ProfessionalRepository professionalRepository;
+
+    @Autowired
+    private RangeInrRepository rangeInrRepository;
+
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -107,6 +113,22 @@ public class UserService {
             Professional professional = professionalRepository.findById(professionalId)
                     .orElseThrow(() -> new EntityNotFoundException("Professional not found with id: " + professionalId));
             user.setSupervisor(professional);
+        }        
+        
+        return userRepository.save(user);
+    }
+
+    public User setUserInrRange(Long userId, Long rangeInrId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+        if(rangeInrId == -1){
+            user.setRangeInr(null);
+        }else{
+
+            RangeInr rangeInr = rangeInrRepository.findById(rangeInrId)
+                    .orElseThrow(() -> new EntityNotFoundException("Range of INR not found with id: " + rangeInrId));
+            user.setRangeInr(rangeInr);
         }        
         
         return userRepository.save(user);
