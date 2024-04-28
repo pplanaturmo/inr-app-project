@@ -27,6 +27,6 @@ public class RangeInr {
     @Column(name = "max_level", nullable = false)
     private Double maxLevel;
 
-    @Column(name = "max_level", nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 }
