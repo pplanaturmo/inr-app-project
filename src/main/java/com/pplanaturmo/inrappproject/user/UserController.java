@@ -64,7 +64,7 @@ public class UserController {
     public User updateUser(@PathVariable("userId") @Valid @NotNull Long userId ,@Valid @RequestBody UserRequest createUserRequest) {
 
         User user = convertToUser(createUserRequest);
-        user.setId(null);
+        user.setId(userId);
           return userService.updateUser(user);
     }
 
