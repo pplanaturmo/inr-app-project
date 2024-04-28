@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pplanaturmo.inrappproject.dto.DosageRequest;
+import com.pplanaturmo.inrappproject.dosage.dtos.DosageRequest;
 
 import jakarta.validation.Valid;
 

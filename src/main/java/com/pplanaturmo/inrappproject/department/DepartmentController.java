@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pplanaturmo.inrappproject.dto.DepartmentRequest;
-import com.pplanaturmo.inrappproject.dto.UpdateDepartmentManager;
+import com.pplanaturmo.inrappproject.department.dtos.DepartmentRequest;
+import com.pplanaturmo.inrappproject.department.dtos.UpdateDepartmentManager;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

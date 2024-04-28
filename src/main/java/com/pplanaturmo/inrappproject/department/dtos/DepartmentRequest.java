@@ -1,4 +1,4 @@
-package com.pplanaturmo.inrappproject.dto;
+package com.pplanaturmo.inrappproject.department.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

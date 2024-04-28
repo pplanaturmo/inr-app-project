@@ -1,6 +1,7 @@
 package com.pplanaturmo.inrappproject.dosePattern;
 
-import jakarta.persistence.Column;
+
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +22,6 @@ public class DosePattern {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "pattern")
-    private Double[] pattern;
+    @ElementCollection
+    private Double[] patternValue;
 }

@@ -1,4 +1,4 @@
-package com.pplanaturmo.inrappproject.dto;
+package com.pplanaturmo.inrappproject.professional.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pplanaturmo.inrappproject.user.dtos.UpdateUserDepartment;
+import com.pplanaturmo.inrappproject.user.dtos.UpdateUserInrRange;
+import com.pplanaturmo.inrappproject.user.dtos.UpdateUserPattern;
 import com.pplanaturmo.inrappproject.user.dtos.UpdateUserSupervisor;
 import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 
@@ -78,18 +80,18 @@ public class UserController {
         return userService.assignSupervisorToUser(userId, professionalId);
     }
 
-    // @PutMapping("/{userId}/range-inr")
-    // public User set(@PathVariable("userId") @Valid @NotNull Long userId, @RequestBody @Valid UpdateUserSupervisor updateUserSupervisor) {
-    //     Long professionalId = updateUserSupervisor.getProfessionalId();
-    //     return userService.assignDepartmentToUser(userId, professionalId);
-    // }
+    @PutMapping("/{userId}/range-inr")
+    public User set(@PathVariable("userId") @Valid @NotNull Long userId, @RequestBody @Valid UpdateUserInrRange updateUserInrRange) {
+        Long rangeId = updateUserInrRange.getRangeId();
+        return userService.assignDepartmentToUser(userId, rangeId);
+    }
 
     
-    // @PutMapping("/{userId}/dose-pattern")
-    // public User set(@PathVariable("userId") @Valid @NotNull Long userId, @RequestBody @Valid UpdateUserSupervisor updateUserSupervisor) {
-    //     Long professionalId = updateUserSupervisor.getProfessionalId();
-    //     return userService.assignDepartmentToUser(userId, professionalId);
-    // }
+    @PutMapping("/{userId}/dose-pattern")
+    public User set(@PathVariable("userId") @Valid @NotNull Long userId, @RequestBody @Valid UpdateUserPattern updateUserPattern) {
+        Long patternId = updateUserPattern.getPatternId();
+        return userService.assignDepartmentToUser(userId, patternId);
+    }
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@Valid @PathVariable("userId") @NotNull Long userId) {

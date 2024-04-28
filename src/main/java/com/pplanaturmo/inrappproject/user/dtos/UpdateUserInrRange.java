@@ -1,4 +1,4 @@
-package com.pplanaturmo.inrappproject.dto;
+package com.pplanaturmo.inrappproject.user.dtos;
 
 import org.springframework.format.annotation.NumberFormat;
 
@@ -11,16 +11,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateDepartmentManager {
-
+public class UpdateUserInrRange {
+    
     @NumberFormat
     @NotNull(message = "User id is required")
     @NotBlank(message = "User id is required")
     private Long userId;
 
     @NumberFormat
-    @NotNull(message = "Manager id is required")
-    @NotBlank(message = "Manager id is required")
-    private Long managerId;
+    @NotNull(message = "Range Id is required")
+    @NotBlank(message = "Range Id is required")
+    private Long rangeId;
 
 }

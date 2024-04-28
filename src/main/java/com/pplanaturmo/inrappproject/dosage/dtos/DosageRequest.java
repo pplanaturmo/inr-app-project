@@ -1,4 +1,4 @@
-package com.pplanaturmo.inrappproject.dto;
+package com.pplanaturmo.inrappproject.dosage.dtos;
 
 import java.util.Date;
 
