@@ -1,6 +1,5 @@
 package com.pplanaturmo.inrappproject.measurement.dtos;
 
-import java.util.Date;
 
 import org.springframework.format.annotation.NumberFormat;
 
@@ -15,9 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MeasurementRequest {
 
-
-    @NotNull(message = "Date  is required")
-    private Date date;
 
     @NumberFormat
     @NotNull(message = "Value is required")
