@@ -10,7 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pplanaturmo.inrappproject.model.Professional.TypeEnum;
+import com.pplanaturmo.inrappproject.professional.Professional.TypeEnum;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;

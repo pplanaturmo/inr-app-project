@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.pplanaturmo.inrappproject.model.DosePattern;
-import com.pplanaturmo.inrappproject.model.RangeInr;
-import com.pplanaturmo.inrappproject.repository.DosePatternRepository;
-import com.pplanaturmo.inrappproject.repository.RangeInrRepository;
+import com.pplanaturmo.inrappproject.dosePattern.DosePattern;
+import com.pplanaturmo.inrappproject.dosePattern.DosePatternRepository;
+import com.pplanaturmo.inrappproject.rangeInr.RangeInr;
+import com.pplanaturmo.inrappproject.rangeInr.RangeInrRepository;
 
 import jakarta.annotation.PostConstruct;
 
