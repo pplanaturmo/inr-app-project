@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
    
     List<User> findByDepartmentId(Long departmentId);
+
+    List<User> findByProfessionalId(Long professionalId);
     
     boolean existsByEmailAndIdNot(String email,Long id);
     

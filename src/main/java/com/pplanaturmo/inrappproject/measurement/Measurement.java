@@ -5,9 +5,11 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import java.util.Date;
 
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.pplanaturmo.inrappproject.alerts.Alert;
 import com.pplanaturmo.inrappproject.dosePattern.DosePattern;
 import com.pplanaturmo.inrappproject.user.User;
 
@@ -32,9 +34,6 @@ public class Measurement {
     @Column(name = "value", nullable = false)
     private Double value;
 
-    // @Column(name = "recomended_level", nullable = false)
-    // private Integer recommendedLevel;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recommended_pattern", referencedColumnName = "id", nullable = false)
     private DosePattern recommendedPattern;
@@ -48,5 +47,8 @@ public class Measurement {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
+
+    @OneToOne(mappedBy = "measurement", cascade = CascadeType.ALL)
+    private Alert alert;
 }
 

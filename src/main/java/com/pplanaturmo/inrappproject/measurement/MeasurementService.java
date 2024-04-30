@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pplanaturmo.inrappproject.dosage.Dosage;
 import com.pplanaturmo.inrappproject.dosePattern.DosePattern;
 import com.pplanaturmo.inrappproject.dosePattern.DosePatternRepository;
 import com.pplanaturmo.inrappproject.measurement.exceptions.DangerousValueException;
@@ -25,6 +24,10 @@ public class MeasurementService {
     private DosePatternRepository dosePatternRepository;
 
     public Measurement createMeasurement(Measurement measurement) {
+
+
+
+
         return measurementRepository.save(measurement);
     }
 
@@ -60,14 +63,14 @@ public class MeasurementService {
         Long patternId = user.getDosePattern().getId();
 
         if (needToIncreaseLevel(user, value)) {
-            patternId = (value <= TWO_LEVELS_INCREASE_VALUE) ? patternId + 2 : patternId++;
+            patternId = (value <= TWO_LEVELS_INCREASE_VALUE) ? patternId + 2 : patternId +1;
         }
 
         if (needToDecreaseLevel(user, value)) {
-            if (value <= TOO_DANGEROUS_VALUE) {
-                patternId--;
-            } else {
+            if (value > TOO_DANGEROUS_VALUE) {
                 throw new DangerousValueException("The value is too dangerous. Please consult a doctor.");
+            } else {
+                patternId --;
             }
         }
 
@@ -79,44 +82,14 @@ public class MeasurementService {
     }
 
     private Boolean needToIncreaseLevel(User user, Double value) {
-        return value > user.getRangeInr().getMaxLevel() && user.getDosePattern().getId() > MIN_PATTERN_LEVEL;
+        final int MAX_PATTERN_LEVEL = 56;
+        return value > user.getRangeInr().getMaxLevel() && user.getDosePattern().getId() > MAX_PATTERN_LEVEL;
     }
 
     private Boolean needToDecreaseLevel(User user, Double value) {
-        return value < user.getRangeInr().getMinLevel() && user.getDosePattern().getId() < MAX_PATTERN_LEVEL;
-    }
-
-    private List<Dosage> createDosagesByMeasurement(Measurement measurement) {
-
-        final int MAX_PATTERN_LEVEL = 56;
         final int MIN_PATTERN_LEVEL = 1;
-        final int STANDARD_DAYS = 7;
-        final int MEDIUM_DEVIATION_DAYS = 5;
-        final int HIGH_DEVIATION_DAYS = 4;
-        final Double VERY_LOW_VALUE = 1.3;
-        final Double LOW_VALUE = 1.8;
-        final Double IN_RANGE = 3.2;
-        final Double HIGH_VALUE = 4.9;
-        final Double VERY_HIGH_VALUE = 7.0;
-
-        Integer numberOfDosages;
-        Double value = measurement.getValue();
-
-        if (value < VERY_LOW_VALUE) {
-            numberOfDosages = HIGH_DEVIATION_DAYS;
-
-        } else if (value < LOW_VALUE) {
-            numberOfDosages = MEDIUM_DEVIATION_DAYS;
-        } else if (value < IN_RANGE) {
-            numberOfDosages = STANDARD_DAYS;
-        } else if (value < HIGH_VALUE) {
-            numberOfDosages = STANDARD_DAYS;
-        } else if (value < VERY_HIGH_VALUE) {
-            numberOfDosages = MEDIUM_DEVIATION_DAYS;
-        } 
-
-        //TODO   LOGIC FOR CREATING THE DOSAGES AND ITS DATES AND ALL
-
+        return value < user.getRangeInr().getMinLevel() && user.getDosePattern().getId() < MIN_PATTERN_LEVEL;
     }
+
 
 }

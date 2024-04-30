@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pplanaturmo.inrappproject.dosage.DosageService;
 import com.pplanaturmo.inrappproject.dosePattern.DosePattern;
-import com.pplanaturmo.inrappproject.dosePattern.DosePatternRepository;
 import com.pplanaturmo.inrappproject.measurement.dtos.MeasurementRequest;
 import com.pplanaturmo.inrappproject.user.User;
 import com.pplanaturmo.inrappproject.user.UserRepository;
@@ -34,6 +34,8 @@ public class MeasurementController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private DosageService dosageService;
    
 
     @PostMapping("/create/{userId}")
@@ -42,6 +44,7 @@ public class MeasurementController {
         Measurement measurement = convertToMeasurement(userId, measurementRequest);
         Measurement newMeasurement = measurementService.createMeasurement(measurement);
         
+        dosageService.createDosagesByMeasurement(newMeasurement);
 
         return newMeasurement;
     }
@@ -53,7 +56,6 @@ public class MeasurementController {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
         DosePattern pattern = measurementService.calculatePatternLevel(user, measurementRequest.getValue());
-
         measurement.setUser(user);
         measurement.setDate(now);
         measurement.setValue(measurementRequest.getValue());
@@ -61,36 +63,6 @@ public class MeasurementController {
         return measurement;
     }
 
-    // private DosePattern calculatePatternLevel(User user, Double value) {
-    //     Long patternId = user.getDosePattern().getId();
-
-    //     if (needToIncreaseLevel(user, value)) {
-    //         patternId++;
-    //     }
-
-    //     if (needToDecreaseLevel(user, value)) {
-    //         patternId--;
-    //     }
-
-    //     final Long finalPatternId = patternId;
-    //     DosePattern dosePattern = dosePatternRepository.findById(patternId)
-    //             .orElseThrow(() -> new EntityNotFoundException("Dose pattern not found with id: " + finalPatternId));
-
-    //     return dosePattern;
-    // }
-
-    // private Boolean needToIncreaseLevel(User user, Double value) {
-    //     return value > user.getRangeInr().getMaxLevel() && user.getDosePattern().getId() > MIN_PATTERN_LEVEL;
-    // }
-
-    // private Boolean needToDecreaseLevel(User user, Double value) {
-    //     return value < user.getRangeInr().getMinLevel() && user.getDosePattern().getId() < MAX_PATTERN_LEVEL;
-    // }
-
-    
-    // private void createDosagesByMeasurement(Measurement){
-
-    // }
 
     @GetMapping("/")
     public List<Measurement> getAllMeasurements() {

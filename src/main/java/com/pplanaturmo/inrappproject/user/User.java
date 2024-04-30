@@ -94,11 +94,4 @@ public class User {
     private List<Role> roles;
 
     
-
-    public enum BotLevel {
-        PATIENT,
-        PROFESSIONAL,
-        MANAGER,
-        ADMIN
-    }
 }

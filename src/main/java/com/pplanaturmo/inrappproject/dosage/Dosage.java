@@ -32,6 +32,9 @@ public class Dosage {
     @Column(name = "taken", nullable = false)
     private Boolean taken;
 
+    @Column(name = "dose", nullable = false)
+    private Double doseValue;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -79,6 +79,10 @@ public class UserService {
         return userRepository.findByDepartmentId(department_id);
     }
 
+    public List<User> getUsersByProfessionalId(Long professionalId) {
+        return userRepository.findByProfessionalId(professionalId);
+    }
+
     public User assignDepartmentToUser(Long userId, Long department_id) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
