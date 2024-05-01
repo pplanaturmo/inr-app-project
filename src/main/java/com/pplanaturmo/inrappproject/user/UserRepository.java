@@ -10,7 +10,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
    
     List<User> findByDepartmentId(Long departmentId);
 
-    List<User> findByProfessionalId(Long professionalId);
+    List<User> findBySupervisorId(Long supervisorId);
     
     boolean existsByEmailAndIdNot(String email,Long id);
     

@@ -1,19 +1,20 @@
 package com.pplanaturmo.inrappproject.measurement;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pplanaturmo.inrappproject.alerts.Alert;
-import com.pplanaturmo.inrappproject.alerts.Alert.LevelEnum;
 import com.pplanaturmo.inrappproject.dosePattern.DosePattern;
 import com.pplanaturmo.inrappproject.dosePattern.DosePatternRepository;
+import com.pplanaturmo.inrappproject.measurement.dtos.MeasurementRequest;
 import com.pplanaturmo.inrappproject.measurement.exceptions.DangerousValueException;
 import com.pplanaturmo.inrappproject.user.User;
+import com.pplanaturmo.inrappproject.user.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -26,11 +27,11 @@ public class MeasurementService {
     @Autowired
     private DosePatternRepository dosePatternRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+
     public Measurement createMeasurement(Measurement measurement) {
-
-
-
-
         return measurementRepository.save(measurement);
     }
 
@@ -57,6 +58,23 @@ public class MeasurementService {
     public Measurement findLatestMeasurementByUserId(Long userId) {
         return measurementRepository.findLatestByUserId(userId).get();
     }
+
+    public Measurement convertToMeasurement(Long userId, MeasurementRequest measurementRequest) {
+          Measurement measurement = new Measurement();
+          Date now = new Date();
+          User user = userRepository.findById(userId)
+                  .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+  
+          DosePattern pattern = calculatePatternLevel(user, measurementRequest.getValue());
+          Double[] dosagesList = calculateDosagesList(measurementRequest.getValue(),pattern);
+  
+          measurement.setUser(user);
+          measurement.setDate(now);
+          measurement.setValue(measurementRequest.getValue());
+          measurement.setRecommendedPattern(pattern);
+          measurement.setDosagesPattern(dosagesList);
+          return measurement;
+      }
 
     public DosePattern calculatePatternLevel(User user, Double value) {
 
@@ -95,7 +113,7 @@ public class MeasurementService {
     }
 
 
-    public Double[] calculateDosagesPattern(Double value,DosePattern pattern){
+    public Double[] calculateDosagesList(Double value,DosePattern pattern){
 
         final int STANDARD_DAYS = 7;
         final int MEDIUM_DEVIATION_DAYS = 5;
@@ -131,8 +149,8 @@ public class MeasurementService {
         if(value<LOW_VALUE){
             Double[] increasingDosePattern = reversePattern(pattern.getPatternValue());
             doseValuesList = calculateValuesForChangingLevel(numberOfDosages,increasingDosePattern);
-        }else if(value <= IN_RANGE){
-            doseValuesList =  calculateValuesForInRange(numberOfDosages,pattern.getPatternValue());
+        }else if(value <= IN_RANGE){ 
+            doseValuesList =  continuePreviousPattern(numberOfDosages,pattern.getPatternValue());
         }else{
             doseValuesList = calculateValuesForChangingLevel(numberOfDosages,pattern.getPatternValue());
         }
@@ -155,10 +173,14 @@ public class MeasurementService {
         return values;
     }
 
-    private Double[] calculateValuesForInRange(Integer numberOfDosages,Double[] pattern){
+    private Double[] continuePreviousPattern(Integer numberOfDosages,Double[] previuosPattern){
         Double[] values = new Double[numberOfDosages];
-
-
+    
+        for (int i = 0; i < values.length; i++) {
+            int index = (i + 1) % previuosPattern.length;
+            values[i] = previuosPattern[index];
+        }
+        
         return values;
     }
 

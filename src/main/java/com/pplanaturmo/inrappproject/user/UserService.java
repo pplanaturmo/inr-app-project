@@ -80,7 +80,7 @@ public class UserService {
     }
 
     public List<User> getUsersByProfessionalId(Long professionalId) {
-        return userRepository.findByProfessionalId(professionalId);
+        return userRepository.findBySupervisorId(professionalId);
     }
 
     public User assignDepartmentToUser(Long userId, Long department_id) {

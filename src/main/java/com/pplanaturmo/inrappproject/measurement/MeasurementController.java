@@ -1,6 +1,5 @@
 package com.pplanaturmo.inrappproject.measurement;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pplanaturmo.inrappproject.alerts.AlertService;
 import com.pplanaturmo.inrappproject.dosage.DosageService;
-import com.pplanaturmo.inrappproject.dosePattern.DosePattern;
 import com.pplanaturmo.inrappproject.measurement.dtos.MeasurementRequest;
-import com.pplanaturmo.inrappproject.user.User;
-import com.pplanaturmo.inrappproject.user.UserRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
@@ -32,40 +28,22 @@ public class MeasurementController {
     private MeasurementService measurementService;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private DosageService dosageService;
    
+    @Autowired
+    private AlertService alertService;
 
     @PostMapping("/create/{userId}")
     public Measurement createMeasurement(@PathVariable("userId") @Valid @NotNull Long userId,
             @Valid @RequestBody MeasurementRequest measurementRequest) {
-        Measurement measurement = convertToMeasurement(userId, measurementRequest);
+        Measurement measurement = measurementService.convertToMeasurement(userId, measurementRequest);
         Measurement newMeasurement = measurementService.createMeasurement(measurement);
         
+        alertService.createAlertIfNeeded(newMeasurement);
         dosageService.createDosagesByMeasurement(newMeasurement);
 
         return newMeasurement;
     }
-
-    private Measurement convertToMeasurement(Long userId, MeasurementRequest measurementRequest) {
-        Measurement measurement = new Measurement();
-        Date now = new Date();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-
-        DosePattern pattern = measurementService.calculatePatternLevel(user, measurementRequest.getValue());
-        Double[] dosagesPattern = measurementService.calculateDosagesPattern(measurementRequest.getValue(),pattern);
-
-        measurement.setUser(user);
-        measurement.setDate(now);
-        measurement.setValue(measurementRequest.getValue());
-        measurement.setRecommendedPattern(pattern);
-        measurement.setDosagesPattern(dosagesPattern);
-        return measurement;
-    }
-
 
     @GetMapping("/")
     public List<Measurement> getAllMeasurements() {
