@@ -56,10 +56,13 @@ public class MeasurementController {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
         DosePattern pattern = measurementService.calculatePatternLevel(user, measurementRequest.getValue());
+        Double[] dosagesPattern = measurementService.calculateDosagesPattern(measurementRequest.getValue(),pattern);
+
         measurement.setUser(user);
         measurement.setDate(now);
         measurement.setValue(measurementRequest.getValue());
         measurement.setRecommendedPattern(pattern);
+        measurement.setDosagesPattern(dosagesPattern);
         return measurement;
     }
 

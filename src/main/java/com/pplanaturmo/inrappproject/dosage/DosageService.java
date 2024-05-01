@@ -1,6 +1,6 @@
 package com.pplanaturmo.inrappproject.dosage;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -58,18 +58,9 @@ public class DosageService {
         return dosages;
     }
 
-    public List<Dosage> getDosageByDate(Long userId, Date doseDate) {
-        List<Measurement> measurements = measurementRepository.findByUserId(userId);
-        List<Dosage> dosagesForDate = new ArrayList<>();
-
-        for (Measurement measurement : measurements) {
-
-            List<Dosage> dosages = dosageRepository.findByMeasurementAndDoseDate(measurement, doseDate);
-
-            dosagesForDate.addAll(dosages);
-        }
-
-        return dosagesForDate;
+    public Dosage getDosageByDate(Long userId, Date doseDate) {
+        return dosageRepository.findByMeasurement_User_IdAndDoseDate(userId, doseDate)
+                .orElse(null);
     }
 
     public List<Dosage> getDosagesBetweenDates(Long userId, Date startDate, Date endDate) {
@@ -87,7 +78,6 @@ public class DosageService {
         return dosages;
     }
 
-    
     public void createDosagesByMeasurement(Measurement measurement) {
 
         final int STANDARD_DAYS = 7;
@@ -101,14 +91,13 @@ public class DosageService {
         final Double VERY_HIGH_VALUE = 7.0;
 
         Integer numberOfDosages;
-        Boolean ascendingDose = true;
-        
-        Double value = measurement.getValue();
+        Boolean ascendingOrder = true;
 
+        Double value = measurement.getValue();
 
         if (value < VERY_LOW_VALUE) {
             numberOfDosages = HIGH_DEVIATION_DAYS;
-            
+
             Alert lowLevel = new Alert();
             lowLevel.setMeasurement(measurement);
             lowLevel.setLevel(LevelEnum.TOO_LOW);
@@ -137,15 +126,12 @@ public class DosageService {
             alertService.createAlert(dangerousLevel);
         }
 
-        //TODO   LOGIC FOR CREATING THE DOSAGES AND ITS DATES AND ALL
+        // TODO LOGIC FOR CREATING THE DOSAGES AND ITS DATES AND ALL
 
-   List<Dosage> dosages = new ArrayList<>();
-        
-      
-        // Set the initial date as the current day
-        Date currentDate = new Date(now);
+        List<Dosage> dosages = new ArrayList<>();
 
-        // Initialize index for dosage array
+        Date currentDate = new Date();
+
         int dosageIndex = 0;
 
         // Loop to calculate and store dosages
@@ -154,9 +140,8 @@ public class DosageService {
             Dosage dosage = new Dosage();
             dosage.setMeasurement(measurement);
             dosage.setDoseDate(currentDate);
-            dosage.setTaken(false); // Assuming initially not taken
+            dosage.setTaken(false);
 
-            // Set dosage value from array and increment index
             dosage.setDoseValue(dosageValues[dosageIndex]);
             dosageIndex = (dosageIndex + 1) % dosageValues.length; // Wrap around if reached end of array
 
@@ -174,5 +159,11 @@ public class DosageService {
         return measurementRepository.saveAll(dosages);
     }
 
+    private  Double[] createDosagesValues(Long recommendedLevelId,Integer numberOfDays,Boolean ascendingOrder){
+        Double[] dosagesValues = new  Double[numberOfDays];
+
+
+        return dosagesValues;
     }
+
 }

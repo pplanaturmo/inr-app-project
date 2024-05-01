@@ -34,9 +34,13 @@ public class Measurement {
     @Column(name = "value", nullable = false)
     private Double value;
 
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recommended_pattern", referencedColumnName = "id", nullable = false)
     private DosePattern recommendedPattern;
+    
+    @ElementCollection
+    private Double[] dosagesPattern;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
