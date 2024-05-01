@@ -72,7 +72,7 @@ public class MeasurementService {
           measurement.setDate(now);
           measurement.setValue(measurementRequest.getValue());
           measurement.setRecommendedPattern(pattern);
-          measurement.setDosagesPattern(dosagesList);
+          measurement.setDosagesValuesList(dosagesList);
           return measurement;
       }
 

@@ -13,13 +13,6 @@ public interface ExpectedMeasurementDateRepository extends JpaRepository<Expecte
 
     List<ExpectedMeasurementDate> findByFulfilled(Boolean fulfilled);
 
-    // @Query("SELECT e FROM ExpectedMeasurementDate e WHERE e.expectedDate <>
-    // e.fullfilledDate")
-    // List<ExpectedMeasurementDate> findByMismatchedDates();
-    // @Query("SELECT e FROM ExpectedMeasurementDate e WHERE
-    // DATEDIFF(e.expectedDate, e.fullfilledDate) != 0")
-    // List<ExpectedMeasurementDate> findByMismatchedDates();
-
     @Query("SELECT e FROM ExpectedMeasurementDate e WHERE e.expectedDate <> e.fullfilled_date")
     List<ExpectedMeasurementDate> findByMismatchedDates();
 

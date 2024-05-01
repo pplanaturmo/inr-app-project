@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pplanaturmo.inrappproject.alerts.AlertService;
 import com.pplanaturmo.inrappproject.dosage.DosageService;
+import com.pplanaturmo.inrappproject.expectedMeasurementDate.ExpectedMeasurementDateService;
 import com.pplanaturmo.inrappproject.measurement.dtos.MeasurementRequest;
+import com.pplanaturmo.inrappproject.user.User;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -33,6 +35,9 @@ public class MeasurementController {
     @Autowired
     private AlertService alertService;
 
+    @Autowired
+    private ExpectedMeasurementDateService expectedMeasurementDateService;
+
     @PostMapping("/create/{userId}")
     public Measurement createMeasurement(@PathVariable("userId") @Valid @NotNull Long userId,
             @Valid @RequestBody MeasurementRequest measurementRequest) {
@@ -41,6 +46,9 @@ public class MeasurementController {
         
         alertService.createAlertIfNeeded(newMeasurement);
         dosageService.createDosagesByMeasurement(newMeasurement);
+        Integer daysToNextMeasurement = newMeasurement.getDosagesValuesList().length;
+        User measurementUser = measurement.getUser();
+        expectedMeasurementDateService.generateExpectedMeasurementDate(daysToNextMeasurement, measurementUser);
 
         return newMeasurement;
     }

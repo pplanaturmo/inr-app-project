@@ -1,9 +1,13 @@
 package com.pplanaturmo.inrappproject.expectedMeasurementDate;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.pplanaturmo.inrappproject.user.User;
 
 import jakarta.transaction.Transactional;
 
@@ -14,7 +18,22 @@ public class ExpectedMeasurementDateService {
     @Autowired
     private ExpectedMeasurementDateRepository expectedMeasurementDateRepository;
 
-    public ExpectedMeasurementDate save(ExpectedMeasurementDate expectedMeasurementDate) {
+    public void generateExpectedMeasurementDate(Integer days, User user){
+            ExpectedMeasurementDate newExpectedMeasurementDate = new ExpectedMeasurementDate();
+
+            Date currentDate = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(currentDate);
+            calendar.add(Calendar.DAY_OF_MONTH, days);
+
+            newExpectedMeasurementDate.setUser(user);
+            newExpectedMeasurementDate.setExpectedDate(calendar.getTime());
+            newExpectedMeasurementDate.setFulfilled(false);
+            saveExpectedMeasurementDate(newExpectedMeasurementDate);
+    }
+
+
+    public ExpectedMeasurementDate saveExpectedMeasurementDate(ExpectedMeasurementDate expectedMeasurementDate) {
         return expectedMeasurementDateRepository.save(expectedMeasurementDate);
     }
 
@@ -45,4 +64,6 @@ public class ExpectedMeasurementDateService {
     public List<ExpectedMeasurementDate> findByMismatchedDates() {
         return expectedMeasurementDateRepository.findByMismatchedDates();
     }
+
+   
 }

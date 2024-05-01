@@ -77,7 +77,7 @@ public class DosageService {
         final Double SKIP_FIRST_DOSE = 5.0;
         final Double NO_DOSAGES = 7.0;
         final Double SKIP_DAY_VALUE = 0.0;
-        Double[] dosagesList = measurement.getDosagesPattern();
+        Double[] dosagesList = measurement.getDosagesValuesList();
 
         Double value = measurement.getValue();
         if (value > NO_DOSAGES) {

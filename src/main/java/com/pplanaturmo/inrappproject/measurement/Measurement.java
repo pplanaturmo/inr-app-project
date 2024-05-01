@@ -40,7 +40,7 @@ public class Measurement {
     private DosePattern recommendedPattern;
     
     @ElementCollection
-    private Double[] dosagesPattern;
+    private Double[] dosagesValuesList;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
