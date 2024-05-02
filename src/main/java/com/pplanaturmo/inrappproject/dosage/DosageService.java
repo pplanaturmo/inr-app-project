@@ -109,6 +109,8 @@ public class DosageService {
         }
     }
 
+
+    //TODO check if dosage dto is needed
     private void saveDosage(Measurement measurement, Date doseDate, Double doseValue) {
         Dosage dosage = new Dosage();
         dosage.setMeasurement(measurement);

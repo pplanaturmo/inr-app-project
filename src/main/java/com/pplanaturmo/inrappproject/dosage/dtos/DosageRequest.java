@@ -1,6 +1,6 @@
 package com.pplanaturmo.inrappproject.dosage.dtos;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.format.annotation.NumberFormat;
 
@@ -22,7 +22,7 @@ public class DosageRequest {
 
     @NotNull(message = "Date is required")
     @NotBlank(message = "Date is required")
-    private Date doseDate;
+    private LocalDate doseDate;
 
     @NotNull(message = "Taken value is required")
     @NotBlank(message = "Taken value is required")

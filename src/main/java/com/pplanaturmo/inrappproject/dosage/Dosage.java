@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -27,7 +29,7 @@ public class Dosage {
     private Measurement measurement;
 
     @Column(name = "dose_date", nullable = false)
-    private Date doseDate;
+    private LocalDate doseDate;
 
     @Column(name = "taken", nullable = false)
     private Boolean taken;
@@ -35,13 +37,13 @@ public class Dosage {
     @Column(name = "dose", nullable = false)
     private Double doseValue;
 
-    @CreationTimestamp
+ @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 }

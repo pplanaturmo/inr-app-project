@@ -44,7 +44,6 @@ public class ProfessionalService {
         Professional professional = professionalRepository.findById(professionalId)
                 .orElseThrow(() -> new RuntimeException("Professional not found"));
 
-        //Mejor con excepciones??
         return professional.getSupervisedUsers();
     }
 }

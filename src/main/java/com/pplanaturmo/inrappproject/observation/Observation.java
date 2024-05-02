@@ -3,7 +3,9 @@ import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
-import java.util.Date;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -31,26 +33,26 @@ public class Observation {
     private Measurement measurement;
 
     @Column(name = "date", nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "cause", nullable = false)
-    private Cause cause;
+    private CauseEnum cause;
 
-    @Column(name = "description", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "description", nullable = true, columnDefinition = "LONGTEXT")
     private String description;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
-    public enum Cause {
+    public enum CauseEnum {
         NO_DOSE,
         DOUBLE_DOSE,
         BLEEDING,

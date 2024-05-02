@@ -13,6 +13,7 @@ import com.pplanaturmo.inrappproject.professional.Professional;
 import com.pplanaturmo.inrappproject.professional.ProfessionalRepository;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInr;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInrRepository;
+import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 import com.pplanaturmo.inrappproject.user.exceptions.AlreadyExistsException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -81,6 +82,20 @@ public class UserService {
 
     public List<User> getUsersByProfessionalId(Long professionalId) {
         return userRepository.findBySupervisorId(professionalId);
+    }
+
+    public User convertToUser(UserRequest createUserRequest) {
+        User user = new User();
+
+        user.setName(createUserRequest.getName());
+        user.setSurname(createUserRequest.getSurname());
+        user.setIdCard(createUserRequest.getIdCard());
+        user.setHealthCard(createUserRequest.getHealthCard());
+        user.setEmail(createUserRequest.getEmail());
+        user.setPhone(createUserRequest.getPhone());
+        user.setDataConsent(createUserRequest.getDataConsent());
+        user.setPassword(createUserRequest.getPassword());
+        return user;
     }
 
     public User assignDepartmentToUser(Long userId, Long department_id) {
