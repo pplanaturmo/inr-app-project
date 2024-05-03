@@ -1,15 +1,12 @@
 package com.pplanaturmo.inrappproject.role;
+
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
-
+import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import com.pplanaturmo.inrappproject.user.User;
-
 import jakarta.persistence.*;
 
 @Data
@@ -31,17 +28,15 @@ public class Role {
     @Column(name = "role", nullable = false)
     private UserRole assignedRole;
 
-    
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
-
+    private LocalDateTime updatedAt;
 
     public enum UserRole {
         PATIENT,

@@ -1,6 +1,7 @@
 package com.pplanaturmo.inrappproject.measurement;
 
-import java.util.Date;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class MeasurementService {
 
     public Measurement convertToMeasurement(Long userId, MeasurementRequest measurementRequest) {
           Measurement measurement = new Measurement();
-          Date now = new Date();
+          LocalDate now = LocalDate.now();
           User user = userRepository.findById(userId)
                   .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
   
@@ -127,10 +128,8 @@ public class MeasurementService {
 
         Integer numberOfDosages;
        
- 
         if (value < VERY_LOW_VALUE) {
             numberOfDosages = HIGH_DEVIATION_DAYS;
-
         } else if (value < LOW_VALUE) {
             numberOfDosages = MEDIUM_DEVIATION_DAYS;
         } else if (value < IN_RANGE) {
@@ -154,12 +153,7 @@ public class MeasurementService {
         }else{
             doseValuesList = calculateValuesForChangingLevel(numberOfDosages,pattern.getPatternValue());
         }
-
-
-
         return doseValuesList;
-
-
     } 
 
     private Double[] calculateValuesForChangingLevel(Integer numberOfDosages,Double[] pattern){
@@ -169,7 +163,6 @@ public class MeasurementService {
             int index = i % pattern.length;
             values[i] = pattern[index];
         }
-
         return values;
     }
 
@@ -179,8 +172,7 @@ public class MeasurementService {
         for (int i = 0; i < values.length; i++) {
             int index = (i + 1) % previuosPattern.length;
             values[i] = previuosPattern[index];
-        }
-        
+        }      
         return values;
     }
 
@@ -192,6 +184,4 @@ public class MeasurementService {
          }
         return reversedPattern;
     }
-
-
 }

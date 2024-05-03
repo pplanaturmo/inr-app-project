@@ -1,4 +1,5 @@
 package com.pplanaturmo.inrappproject.observation;
+
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,7 @@ public class Observation {
     private Measurement measurement;
 
     @Column(name = "date", nullable = false)
+    @Temporal(TemporalType.DATE)
     private LocalDate date;
 
     @Enumerated(EnumType.STRING)

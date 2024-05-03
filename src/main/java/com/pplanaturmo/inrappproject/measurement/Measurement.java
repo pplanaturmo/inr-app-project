@@ -1,10 +1,12 @@
 package com.pplanaturmo.inrappproject.measurement;
+
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
-import java.util.Date;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -29,30 +31,29 @@ public class Measurement {
     private User user;
 
     @Column(name = "date", nullable = false)
-    private Date date;
+    @Temporal(TemporalType.DATE)
+    private LocalDate date;
 
     @Column(name = "value", nullable = false)
     private Double value;
 
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recommended_pattern", referencedColumnName = "id", nullable = false)
     private DosePattern recommendedPattern;
-    
+
     @ElementCollection
     private Double[] dosagesValuesList;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @OneToOne(mappedBy = "measurement", cascade = CascadeType.ALL)
     private Alert alert;
 }
-

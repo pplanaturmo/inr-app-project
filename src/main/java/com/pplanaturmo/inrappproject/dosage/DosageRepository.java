@@ -2,7 +2,7 @@ package com.pplanaturmo.inrappproject.dosage;
 
 import com.pplanaturmo.inrappproject.measurement.Measurement;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,12 +14,12 @@ public interface DosageRepository extends JpaRepository<Dosage, Long> {
     
     List<Dosage> findByMeasurement(Measurement measurement);
 
-    List<Dosage> findByDoseDate(Date doseDate);
+    List<Dosage> findByDoseDate(LocalDate doseDate);
 
-    List<Dosage> findByMeasurementAndDoseDateBetween(Measurement measurement,Date startDate, Date endDate);
+    List<Dosage> findByMeasurementAndDoseDateBetween(Measurement measurement,LocalDate startDate, LocalDate endDate);
 
-    List<Dosage> findByMeasurementAndDoseDate(Measurement measurement,Date doseDate);
+    List<Dosage> findByMeasurementAndDoseDate(Measurement measurement,LocalDate doseDate);
 
-    Optional<Dosage> findByMeasurement_User_IdAndDoseDate(Long userId, Date doseDate);
+    Optional<Dosage> findByMeasurement_User_IdAndDoseDate(Long userId, LocalDate doseDate);
 
 }

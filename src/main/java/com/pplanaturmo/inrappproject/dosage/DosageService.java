@@ -1,15 +1,16 @@
 package com.pplanaturmo.inrappproject.dosage;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pplanaturmo.inrappproject.aggregatedDtos.DatesBetweenDto;
 import com.pplanaturmo.inrappproject.measurement.Measurement;
 import com.pplanaturmo.inrappproject.measurement.MeasurementRepository;
+import com.pplanaturmo.inrappproject.utilities.DateManagement;
 
 import jakarta.transaction.Transactional;
 
@@ -22,6 +23,9 @@ public class DosageService {
 
     @Autowired
     private MeasurementRepository measurementRepository;
+
+    @Autowired
+    private DateManagement dateManagement;
 
     public Dosage createDosage(Dosage dosage) {
         return dosageRepository.save(dosage);
@@ -48,16 +52,19 @@ public class DosageService {
             List<Dosage> dosagesForMeasurement = dosageRepository.findByMeasurement(measurement);
             dosages.addAll(dosagesForMeasurement);
         }
-
         return dosages;
     }
 
-    public Dosage getDosageByDate(Long userId, Date doseDate) {
+    public Dosage getDosageByDate(Long userId, LocalDate doseDate) {
         return dosageRepository.findByMeasurement_User_IdAndDoseDate(userId, doseDate)
                 .orElse(null);
     }
 
-    public List<Dosage> getDosagesBetweenDates(Long userId, Date startDate, Date endDate) {
+    public List<Dosage> getDosagesBetweenDates(DatesBetweenDto datesBetweenDto) {
+
+        Long userId = datesBetweenDto.getUserId();
+        LocalDate startDate = dateManagement.convertToLocalDate(datesBetweenDto.getStartDate());
+        LocalDate endDate = dateManagement.convertToLocalDate(datesBetweenDto.getFinishDate());
 
         List<Measurement> measurements = measurementRepository.findByUserId(userId);
 
@@ -77,41 +84,31 @@ public class DosageService {
         final Double SKIP_FIRST_DOSE = 5.0;
         final Double NO_DOSAGES = 7.0;
         final Double SKIP_DAY_VALUE = 0.0;
-        Double[] dosagesList = measurement.getDosagesValuesList();
 
+        Double[] dosagesList = measurement.getDosagesValuesList();
         Double value = measurement.getValue();
+
         if (value > NO_DOSAGES) {
             return;
         } else {
-
-            Date currentDate = new Date();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(currentDate);
-
+            LocalDate dosageDate = LocalDate.now();
             if (value >= SKIP_FIRST_DOSE) {
-
-                saveDosage(measurement, calendar.getTime(), SKIP_DAY_VALUE);
-
+                saveDosage(measurement, dosageDate, SKIP_DAY_VALUE);
                 for (int i = 1; i < dosagesList.length; i++) {
-
-                    calendar.add(Calendar.DAY_OF_MONTH, 1);
-                    saveDosage(measurement, calendar.getTime(), dosagesList[i]);
-
+                    dosageDate.plusDays(1);
+                    saveDosage(measurement, dosageDate, dosagesList[i]);
                 }
             } else {
-
                 for (int i = 0; i < dosagesList.length; i++) {
-                    saveDosage(measurement, calendar.getTime(), SKIP_DAY_VALUE);
-                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    saveDosage(measurement, dosageDate, dosagesList[i]);
+                    dosageDate.plusDays(1);
                 }
-
             }
         }
     }
 
-
-    //TODO check if dosage dto is needed
-    private void saveDosage(Measurement measurement, Date doseDate, Double doseValue) {
+    // TODO check if dosage dto is needed
+    private void saveDosage(Measurement measurement, LocalDate doseDate, Double doseValue) {
         Dosage dosage = new Dosage();
         dosage.setMeasurement(measurement);
         dosage.setDoseDate(doseDate);
