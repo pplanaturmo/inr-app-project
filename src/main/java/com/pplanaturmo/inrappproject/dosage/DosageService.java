@@ -83,7 +83,6 @@ public class DosageService {
 
         final Double SKIP_FIRST_DOSE = 5.0;
         final Double NO_DOSAGES = 7.0;
-        final Double SKIP_DAY_VALUE = 0.0;
 
         Double[] dosagesList = measurement.getDosagesValuesList();
         Double value = measurement.getValue();
@@ -92,22 +91,63 @@ public class DosageService {
             return;
         } else {
             LocalDate dosageDate = LocalDate.now();
+
+            if (dosagesStartNexDay(measurement, dosageDate)) {
+                dosageDate = dosageDate.plusDays(1);
+            }
+
             if (value >= SKIP_FIRST_DOSE) {
-                saveDosage(measurement, dosageDate, SKIP_DAY_VALUE);
-                for (int i = 1; i < dosagesList.length; i++) {
-                    dosageDate.plusDays(1);
-                    saveDosage(measurement, dosageDate, dosagesList[i]);
-                }
+                createDosagesHighValue(measurement, dosageDate, dosagesList);
             } else {
-                for (int i = 0; i < dosagesList.length; i++) {
-                    saveDosage(measurement, dosageDate, dosagesList[i]);
-                    dosageDate.plusDays(1);
-                }
+                createDosages(measurement, dosageDate, dosagesList);
             }
         }
     }
 
-    // TODO check if dosage dto is needed
+    private Boolean dosagesStartNexDay(Measurement measurement, LocalDate dosageDate) {
+
+        return getDosageByDate(measurement.getUser().getId(), dosageDate).getTaken();
+    }
+
+    private void createDosagesHighValue(Measurement measurement, LocalDate dosageDate, Double[] dosagesList) {
+        final Double SKIP_DAY_VALUE = 0.0;
+        Long userId = measurement.getId();
+
+        if (dosageDateExists(userId, dosageDate)) {
+            Dosage existingDosage = getDosageByDate(userId, dosageDate);
+            existingDosage.setMeasurement(measurement);
+            existingDosage.setDoseValue(SKIP_DAY_VALUE);
+            updateDosage(existingDosage);
+        } else {
+            saveDosage(measurement, dosageDate, SKIP_DAY_VALUE);
+        }
+
+        for (int i = 1; i < dosagesList.length; i++) {
+            dosageDate = dosageDate.plusDays(1);
+            if (dosageDateExists(userId, dosageDate)) {
+                Dosage existingDosage = getDosageByDate(userId, dosageDate);
+                existingDosage.setMeasurement(measurement);
+                existingDosage.setDoseValue(measurement.getValue());
+                updateDosage(existingDosage);
+            } else {
+                saveDosage(measurement, dosageDate, dosagesList[i]);
+            }
+
+        }
+    }
+
+    private boolean dosageDateExists(Long userId, LocalDate dosageDate) {
+
+        return getDosageByDate(userId, dosageDate) != null;
+    }
+
+    private void createDosages(Measurement measurement, LocalDate dosageDate, Double[] dosagesList) {
+        for (int i = 0; i < dosagesList.length; i++) {
+            saveDosage(measurement, dosageDate, dosagesList[i]);
+            dosageDate = dosageDate.plusDays(1);
+        }
+    }
+
     private void saveDosage(Measurement measurement, LocalDate doseDate, Double doseValue) {
         Dosage dosage = new Dosage();
         dosage.setMeasurement(measurement);

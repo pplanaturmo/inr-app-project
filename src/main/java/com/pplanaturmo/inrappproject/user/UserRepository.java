@@ -5,17 +5,21 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.pplanaturmo.inrappproject.dosePattern.DosePattern;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-   
+
     List<User> findByDepartmentId(Long departmentId);
 
     List<User> findBySupervisorId(Long supervisorId);
-    
-    boolean existsByEmailAndIdNot(String email,Long id);
-    
-    boolean existsByIdCardAndIdNot(String idCard,Long id);
-    
-    boolean existsByHealthCardAndIdNot(String healthCard,Long id);
+
+    List<User> findByDosePattern(DosePattern dosePattern);
+
+    boolean existsByEmailAndIdNot(String email, Long id);
+
+    boolean existsByIdCardAndIdNot(String idCard, Long id);
+
+    boolean existsByHealthCardAndIdNot(String healthCard, Long id);
 
 }

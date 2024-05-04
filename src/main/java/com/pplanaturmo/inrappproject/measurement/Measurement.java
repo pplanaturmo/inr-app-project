@@ -41,6 +41,9 @@ public class Measurement {
     @JoinColumn(name = "recommended_pattern", referencedColumnName = "id", nullable = false)
     private DosePattern recommendedPattern;
 
+    @OneToOne(mappedBy = "measurement", cascade = CascadeType.ALL)
+    private Alert alert;
+
     @ElementCollection
     private Double[] dosagesValuesList;
 
@@ -54,6 +57,4 @@ public class Measurement {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @OneToOne(mappedBy = "measurement", cascade = CascadeType.ALL)
-    private Alert alert;
 }

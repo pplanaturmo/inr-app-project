@@ -1,6 +1,5 @@
 package com.pplanaturmo.inrappproject.measurement;
 
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.pplanaturmo.inrappproject.dosePattern.DosePattern;
 import com.pplanaturmo.inrappproject.dosePattern.DosePatternRepository;
+import com.pplanaturmo.inrappproject.dosePattern.DosePattern.DrugTypeEnum;
 import com.pplanaturmo.inrappproject.measurement.dtos.MeasurementRequest;
 import com.pplanaturmo.inrappproject.measurement.exceptions.DangerousValueException;
 import com.pplanaturmo.inrappproject.user.User;
@@ -30,7 +30,6 @@ public class MeasurementService {
 
     @Autowired
     private UserRepository userRepository;
-
 
     public Measurement createMeasurement(Measurement measurement) {
         return measurementRepository.save(measurement);
@@ -61,44 +60,44 @@ public class MeasurementService {
     }
 
     public Measurement convertToMeasurement(Long userId, MeasurementRequest measurementRequest) {
-          Measurement measurement = new Measurement();
-          LocalDate now = LocalDate.now();
-          User user = userRepository.findById(userId)
-                  .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-  
-          DosePattern pattern = calculatePatternLevel(user, measurementRequest.getValue());
-          Double[] dosagesList = calculateDosagesList(measurementRequest.getValue(),pattern);
-  
-          measurement.setUser(user);
-          measurement.setDate(now);
-          measurement.setValue(measurementRequest.getValue());
-          measurement.setRecommendedPattern(pattern);
-          measurement.setDosagesValuesList(dosagesList);
-          return measurement;
-      }
+        Measurement measurement = new Measurement();
+        LocalDate now = LocalDate.now();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+        DosePattern pattern = calculatePatternLevel(user, measurementRequest.getValue());
+        Double[] dosagesList = calculateDosagesList(measurementRequest.getValue(), pattern);
+
+        measurement.setUser(user);
+        measurement.setDate(now);
+        measurement.setValue(measurementRequest.getValue());
+        measurement.setRecommendedPattern(pattern);
+        measurement.setDosagesValuesList(dosagesList);
+        return measurement;
+    }
 
     public DosePattern calculatePatternLevel(User user, Double value) {
 
         final Double TWO_LEVELS_INCREASE_VALUE = 1.3;
         final Double TOO_DANGEROUS_VALUE = 7.0;
 
-        Long patternId = user.getDosePattern().getId();
+        Integer patternLevel = user.getDosePattern().getLevel();
 
         if (needToIncreaseLevel(user, value)) {
-            patternId = (value <= TWO_LEVELS_INCREASE_VALUE) ? patternId + 2 : patternId +1;
+            patternLevel = (value <= TWO_LEVELS_INCREASE_VALUE) ? patternLevel + 2 : patternLevel + 1;
         }
 
         if (needToDecreaseLevel(user, value)) {
             if (value > TOO_DANGEROUS_VALUE) {
                 throw new DangerousValueException("The value is too dangerous. Please consult a doctor.");
             } else {
-                patternId--;
+                patternLevel--;
             }
         }
 
-        final Long finalPatternId = patternId;
-        DosePattern dosePattern = dosePatternRepository.findById(patternId)
-                .orElseThrow(() -> new EntityNotFoundException("Dose pattern not found with id: " + finalPatternId));
+        DrugTypeEnum drug = user.getDosePattern().getDrug();
+
+        DosePattern dosePattern = dosePatternRepository.findByDrugAndLevel(drug, patternLevel);
 
         return dosePattern;
     }
@@ -113,8 +112,7 @@ public class MeasurementService {
         return value < user.getRangeInr().getMinLevel() && user.getDosePattern().getId() < MIN_PATTERN_LEVEL;
     }
 
-
-    public Double[] calculateDosagesList(Double value,DosePattern pattern){
+    public Double[] calculateDosagesList(Double value, DosePattern pattern) {
 
         final int STANDARD_DAYS = 7;
         final int MEDIUM_DEVIATION_DAYS = 5;
@@ -127,7 +125,7 @@ public class MeasurementService {
         final Double VERY_HIGH_VALUE = 7.0;
 
         Integer numberOfDosages;
-       
+
         if (value < VERY_LOW_VALUE) {
             numberOfDosages = HIGH_DEVIATION_DAYS;
         } else if (value < LOW_VALUE) {
@@ -138,50 +136,50 @@ public class MeasurementService {
             numberOfDosages = STANDARD_DAYS;
         } else if (value < VERY_HIGH_VALUE) {
             numberOfDosages = MEDIUM_DEVIATION_DAYS;
-            
+
         } else {
             numberOfDosages = DANGEROUS_DAYS;
         }
-        
+
         Double[] doseValuesList = new Double[numberOfDosages];
 
-        if(value<LOW_VALUE){
+        if (value < LOW_VALUE) {
             Double[] increasingDosePattern = reversePattern(pattern.getPatternValue());
-            doseValuesList = calculateValuesForChangingLevel(numberOfDosages,increasingDosePattern);
-        }else if(value <= IN_RANGE){ 
-            doseValuesList =  continuePreviousPattern(numberOfDosages,pattern.getPatternValue());
-        }else{
-            doseValuesList = calculateValuesForChangingLevel(numberOfDosages,pattern.getPatternValue());
+            doseValuesList = calculateValuesForChangingLevel(numberOfDosages, increasingDosePattern);
+        } else if (value <= IN_RANGE) {
+            doseValuesList = continuePreviousPattern(numberOfDosages, pattern.getPatternValue());
+        } else {
+            doseValuesList = calculateValuesForChangingLevel(numberOfDosages, pattern.getPatternValue());
         }
         return doseValuesList;
-    } 
+    }
 
-    private Double[] calculateValuesForChangingLevel(Integer numberOfDosages,Double[] pattern){
+    private Double[] calculateValuesForChangingLevel(Integer numberOfDosages, Double[] pattern) {
         Double[] values = new Double[numberOfDosages];
         for (int i = 0; i < numberOfDosages; i++) {
-            
+
             int index = i % pattern.length;
             values[i] = pattern[index];
         }
         return values;
     }
 
-    private Double[] continuePreviousPattern(Integer numberOfDosages,Double[] previuosPattern){
+    private Double[] continuePreviousPattern(Integer numberOfDosages, Double[] previuosPattern) {
         Double[] values = new Double[numberOfDosages];
-    
+
         for (int i = 0; i < values.length; i++) {
             int index = (i + 1) % previuosPattern.length;
             values[i] = previuosPattern[index];
-        }      
+        }
         return values;
     }
 
-    private Double[] reversePattern(Double[] pattern){
+    private Double[] reversePattern(Double[] pattern) {
         Double[] reversedPattern = new Double[pattern.length];
         int length = pattern.length;
         for (int i = 0; i < length; i++) {
             reversedPattern[i] = pattern[length - i - 1];
-         }
+        }
         return reversedPattern;
     }
 }

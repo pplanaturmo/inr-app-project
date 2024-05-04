@@ -67,8 +67,12 @@ public class User {
     @JoinColumn(name = "ranges_inr", referencedColumnName = "id")
     private RangeInr rangeInr;
 
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "patterns", referencedColumnName = "id")
+    // private DosePattern dosePattern;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patterns", referencedColumnName = "id")
+    @JoinColumn(name = "dose_pattern_id", referencedColumnName = "id")
     private DosePattern dosePattern;
 
     @CreationTimestamp
