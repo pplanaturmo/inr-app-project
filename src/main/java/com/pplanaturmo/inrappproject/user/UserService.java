@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import com.pplanaturmo.inrappproject.auth.dtos.AuthenticatedUserResponse;
 import com.pplanaturmo.inrappproject.department.Department;
 import com.pplanaturmo.inrappproject.department.DepartmentRepository;
 import com.pplanaturmo.inrappproject.professional.Professional;
@@ -94,7 +95,7 @@ public class UserService {
         user.setEmail(createUserRequest.getEmail());
         user.setPhone(createUserRequest.getPhone());
         user.setDataConsent(createUserRequest.getDataConsent());
-        user.setPassword(createUserRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
         return user;
     }
 
@@ -145,6 +146,10 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    public AuthenticatedUserResponse createAuthResponse(String idCard, String password) {
+        return new AuthenticatedUserResponse();
     }
 
 }
