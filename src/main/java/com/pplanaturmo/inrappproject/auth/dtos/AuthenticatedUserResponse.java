@@ -2,19 +2,23 @@ package com.pplanaturmo.inrappproject.auth.dtos;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pplanaturmo.inrappproject.role.Role;
-
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticatedUserResponse {
 
-    private String jwt;
+    @JsonProperty("access_token")
+    private String accessToken;
+    @JsonProperty("refresh_token")
+    private String refreshToken;
     private Long id;
     private String name;
     private String surname;
