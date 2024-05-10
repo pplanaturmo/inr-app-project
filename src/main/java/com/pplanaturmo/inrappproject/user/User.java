@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,6 +103,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        if (roles == null) {
+            return Collections.emptyList(); // Return an empty list if roles is null
+        }
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getAssignedRole().name()))
                 .collect(Collectors.toList());

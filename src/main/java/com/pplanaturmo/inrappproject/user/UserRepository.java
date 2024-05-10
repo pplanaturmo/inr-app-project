@@ -27,4 +27,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByHealthCardAndIdNot(String healthCard, Long id);
 
+    boolean existsByEmail(String email);
+
+    boolean existsByIdCard(String idCard);
+
+    boolean existsByHealthCard(String healthCard);
+
 }

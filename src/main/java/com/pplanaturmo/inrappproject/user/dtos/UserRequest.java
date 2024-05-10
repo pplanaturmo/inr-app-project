@@ -44,6 +44,6 @@ public class UserRequest {
     private Long phone;
 
     @NotNull
-    private Boolean dataConsent;
-   
+    private String dataConsent;
+
 }

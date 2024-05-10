@@ -1,5 +1,6 @@
 package com.pplanaturmo.inrappproject.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import com.pplanaturmo.inrappproject.professional.Professional;
 import com.pplanaturmo.inrappproject.professional.ProfessionalRepository;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInr;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInrRepository;
+import com.pplanaturmo.inrappproject.role.Role;
+import com.pplanaturmo.inrappproject.role.RoleRepository;
+import com.pplanaturmo.inrappproject.role.Role.UserRole;
 import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 import com.pplanaturmo.inrappproject.user.exceptions.AlreadyExistsException;
 
@@ -48,14 +52,30 @@ public class UserService {
 
     // Checks that the three fields are unique in the database
     private void validateUniqueFields(User user) {
-        if (user.getEmail() != null && userRepository.existsByEmailAndIdNot(user.getEmail(), user.getId())) {
+
+        // if (user.getEmail() != null &&
+        // userRepository.existsByEmailAndIdNot(user.getEmail(), user.getId())) {
+        // throw new AlreadyExistsException("Email already exists: " + user.getEmail());
+        // }
+        // if (user.getIdCard() != null &&
+        // userRepository.existsByIdCardAndIdNot(user.getIdCard(), user.getId())) {
+        // throw new AlreadyExistsException("ID card already exists: " +
+        // user.getIdCard());
+        // }
+        // if (user.getHealthCard() != null
+        // && userRepository.existsByHealthCardAndIdNot(user.getHealthCard(),
+        // user.getId())) {
+        // throw new AlreadyExistsException("Health card already exists: " +
+        // user.getHealthCard());
+        // }
+
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new AlreadyExistsException("Email already exists: " + user.getEmail());
         }
-        if (user.getIdCard() != null && userRepository.existsByIdCardAndIdNot(user.getIdCard(), user.getId())) {
+        if (userRepository.existsByIdCard(user.getIdCard())) {
             throw new AlreadyExistsException("ID card already exists: " + user.getIdCard());
         }
-        if (user.getHealthCard() != null
-                && userRepository.existsByHealthCardAndIdNot(user.getHealthCard(), user.getId())) {
+        if (userRepository.existsByHealthCard(user.getHealthCard())) {
             throw new AlreadyExistsException("Health card already exists: " + user.getHealthCard());
         }
     }
@@ -94,7 +114,9 @@ public class UserService {
         user.setHealthCard(createUserRequest.getHealthCard());
         user.setEmail(createUserRequest.getEmail());
         user.setPhone(createUserRequest.getPhone());
-        user.setDataConsent(createUserRequest.getDataConsent());
+        boolean incomingDataConsent = Boolean.parseBoolean(createUserRequest.getDataConsent());
+
+        user.setDataConsent(incomingDataConsent);
         user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
         return user;
     }
