@@ -18,7 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService {
 
-    final String SECRET_KEY = "1fa6a1e8772eb52066eee60866a8834f0e3bb167ecc5f997e6c5775f6b034303a3a00afd54f14eac8506578cd4308ff01b84c36eb3d0b5f9e8eaec34186c";
+    // final String SECRET_KEY =
+    // "1fa6a1e8772eb52066eee60866a8834f0e3bb167ecc5f997e6c5775f6b034303a3a00afd54f14eac8506578cd4308ff01b84c36eb3d0b5f9e8eaec34186c";
     @Value("${jwt.secret}")
     private String secretKey;
     @Value("${jwt.expiration}")

@@ -53,28 +53,25 @@ public class UserService {
     // Checks that the three fields are unique in the database
     private void validateUniqueFields(User user) {
 
-        // if (user.getEmail() != null &&
-        // userRepository.existsByEmailAndIdNot(user.getEmail(), user.getId())) {
-        // throw new AlreadyExistsException("Email already exists: " + user.getEmail());
-        // }
-        // if (user.getIdCard() != null &&
-        // userRepository.existsByIdCardAndIdNot(user.getIdCard(), user.getId())) {
-        // throw new AlreadyExistsException("ID card already exists: " +
-        // user.getIdCard());
-        // }
-        // if (user.getHealthCard() != null
-        // && userRepository.existsByHealthCardAndIdNot(user.getHealthCard(),
-        // user.getId())) {
-        // throw new AlreadyExistsException("Health card already exists: " +
-        // user.getHealthCard());
-        // }
+        validateUniqueEmail(user);
+        validateUniqueId(user);
+        validateUniqueHealthCard(user);
 
+    }
+
+    public void validateUniqueEmail(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new AlreadyExistsException("Email already exists: " + user.getEmail());
         }
+    }
+
+    public void validateUniqueId(User user) {
         if (userRepository.existsByIdCard(user.getIdCard())) {
             throw new AlreadyExistsException("ID card already exists: " + user.getIdCard());
         }
+    }
+
+    public void validateUniqueHealthCard(User user) {
         if (userRepository.existsByHealthCard(user.getHealthCard())) {
             throw new AlreadyExistsException("Health card already exists: " + user.getHealthCard());
         }
