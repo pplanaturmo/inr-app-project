@@ -7,9 +7,7 @@ import com.pplanaturmo.inrappproject.auth.token.JwtService;
 import com.pplanaturmo.inrappproject.auth.token.Token;
 import com.pplanaturmo.inrappproject.auth.token.TokenRepository;
 import com.pplanaturmo.inrappproject.auth.token.TokenType;
-import com.pplanaturmo.inrappproject.role.Role;
-import com.pplanaturmo.inrappproject.role.RoleRepository;
-import com.pplanaturmo.inrappproject.role.Role.UserRole;
+import com.pplanaturmo.inrappproject.role.RoleService;
 import com.pplanaturmo.inrappproject.user.User;
 import com.pplanaturmo.inrappproject.user.UserRepository;
 import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
@@ -17,6 +15,8 @@ import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,12 +28,24 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final TokenRepository tokenRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     public AuthenticatedUserResponse register(UserRequest userRequest) {
         var user = User.builder()
@@ -41,19 +53,26 @@ public class AuthenticationService {
                 .surname(userRequest.getSurname())
                 .email(userRequest.getEmail())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
+                .idCard(userRequest.getIdCard())
+                .healthCard(userRequest.getHealthCard())
+                .phone(userRequest.getPhone())
+                .dataConsent(Boolean.parseBoolean(userRequest.getDataConsent()))
                 .build();
 
         var savedUser = userRepository.save(user);
-        var role = new Role();
-        role.setUser(savedUser);
-        role.setAssignedRole(UserRole.PATIENT);
-        roleRepository.save(role);
+
+        roleService.assignPatientRole(savedUser);
+
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticatedUserResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .id(savedUser.getId())
+                .name(savedUser.getName())
+                .surname(savedUser.getSurname())
+                .roles(savedUser.getRoles())
                 .build();
     }
 
@@ -71,6 +90,10 @@ public class AuthenticationService {
         return AuthenticatedUserResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .roles(user.getRoles())
                 .build();
     }
 

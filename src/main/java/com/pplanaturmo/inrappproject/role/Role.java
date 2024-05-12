@@ -3,10 +3,12 @@ package com.pplanaturmo.inrappproject.role;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import com.pplanaturmo.inrappproject.user.User;
+
 import jakarta.persistence.*;
 
 @Data
@@ -20,13 +22,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private User user;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private UserRole assignedRole;
+    private UserRole role;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -45,3 +41,15 @@ public class Role {
         ADMIN
     }
 }
+
+// @Id
+// @GeneratedValue(strategy = GenerationType.IDENTITY)
+// private Long id;
+
+// @Enumerated(EnumType.STRING)
+// @Column(name = "role", nullable = false)
+// private UserRole assignedRole;
+
+// @ManyToOne(fetch = FetchType.LAZY)
+// @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+// private User user;

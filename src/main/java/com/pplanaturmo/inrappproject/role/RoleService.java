@@ -1,8 +1,10 @@
 package com.pplanaturmo.inrappproject.role;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,17 +41,28 @@ public class RoleService {
         roleRepository.deleteById(id);
     }
 
-    public List<Role> getRolesByUser(User user) {
-        return roleRepository.findByUser(user);
+    public void assignPatientRole(User user) {
+        Role role = roleRepository.findByRole(Role.UserRole.PATIENT)
+                .orElseThrow(() -> new RuntimeException("Patient role not found"));
+        user.setRoles(Collections.singleton(role));
     }
 
-    public void defaultRole(User user) {
-        Role defaultRole = new Role();
-        defaultRole.setUser(user);
-        defaultRole.setAssignedRole(UserRole.PATIENT);
-        roleRepository.save(defaultRole);
-        List<Role> roles = new ArrayList<>();
-        roles.add(defaultRole);
-
+    public void assignProfessionalRole(User user) {
+        Role role = roleRepository.findByRole(Role.UserRole.PROFESSIONAL)
+                .orElseThrow(() -> new RuntimeException("Professional role not found"));
+        user.setRoles(Collections.singleton(role));
     }
+
+    public void assignManagerRole(User user) {
+        Role role = roleRepository.findByRole(Role.UserRole.MANAGER)
+                .orElseThrow(() -> new RuntimeException("Manager role not found"));
+        user.setRoles(Collections.singleton(role));
+    }
+
+    public void assignAdminRole(User user) {
+        Role role = roleRepository.findByRole(Role.UserRole.ADMIN)
+                .orElseThrow(() -> new RuntimeException("Admin role not found"));
+        user.setRoles(Collections.singleton(role));
+    }
+
 }

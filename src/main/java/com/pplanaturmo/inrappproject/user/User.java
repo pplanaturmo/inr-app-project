@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -98,8 +99,12 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Observation> observations;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Role> roles;
+    // @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    // private List<Role> roles;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -108,7 +113,7 @@ public class User implements UserDetails {
             return Collections.emptyList(); // Return an empty list if roles is null
         }
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getAssignedRole().name()))
+                .map(role -> new SimpleGrantedAuthority(role.toString()))
                 .collect(Collectors.toList());
     }
 

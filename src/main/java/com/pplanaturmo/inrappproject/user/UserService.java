@@ -1,6 +1,5 @@
 package com.pplanaturmo.inrappproject.user;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,6 @@ import com.pplanaturmo.inrappproject.professional.Professional;
 import com.pplanaturmo.inrappproject.professional.ProfessionalRepository;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInr;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInrRepository;
-import com.pplanaturmo.inrappproject.role.Role;
-import com.pplanaturmo.inrappproject.role.RoleRepository;
-import com.pplanaturmo.inrappproject.role.Role.UserRole;
 import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 import com.pplanaturmo.inrappproject.user.exceptions.AlreadyExistsException;
 

@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pplanaturmo.inrappproject.user.User;
-import com.pplanaturmo.inrappproject.user.UserService;
 import com.pplanaturmo.inrappproject.user.dtos.UpdateUserRole;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -26,18 +24,18 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    // TODO mirar como hacer esto de los roles
     @PostMapping
     public Role createRole(@Valid @RequestBody UpdateUserRole updateUserRole) {
-        UserService userService = new UserService();
+
         Role newRole = new Role();
-        
-        User user = userService.getUserById(updateUserRole.getUserId());
+
         Role.UserRole assignedRole = Role.UserRole.valueOf(updateUserRole.getAssignedRole().toUpperCase());
-        newRole.setUser(user);
-        newRole.setAssignedRole(assignedRole);
+
+        newRole.setRole(assignedRole);
         return roleService.createRole(newRole);
     }
-    
+
     @GetMapping
     public List<Role> getAllRoles() {
         return roleService.getAllRoles();

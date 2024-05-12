@@ -31,6 +31,7 @@ public class UserController {
     @PostMapping("/create")
     public User createUser(@Valid @RequestBody UserRequest createUserRequest) {
         User user = userService.convertToUser(createUserRequest);
+
         return userService.createUser(user);
     }
 

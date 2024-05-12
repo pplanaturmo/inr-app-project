@@ -1,6 +1,6 @@
 package com.pplanaturmo.inrappproject.auth.dtos;
 
-import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pplanaturmo.inrappproject.role.Role;
@@ -22,5 +22,5 @@ public class AuthenticatedUserResponse {
     private Long id;
     private String name;
     private String surname;
-    private List<Role> roles;
+    private Set<Role> roles;
 }

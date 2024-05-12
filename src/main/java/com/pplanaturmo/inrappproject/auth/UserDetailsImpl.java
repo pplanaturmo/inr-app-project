@@ -27,7 +27,7 @@ public class UserDetailsImpl {
 
     public static UserDetailsImpl build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getAssignedRole().name()))
+                .map(role -> new SimpleGrantedAuthority(role.toString()))
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(
