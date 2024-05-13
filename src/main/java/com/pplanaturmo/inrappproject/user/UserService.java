@@ -47,7 +47,7 @@ public class UserService {
     }
 
     // Checks that the three fields are unique in the database
-    private void validateUniqueFields(User user) {
+    public void validateUniqueFields(User user) {
 
         validateUniqueEmail(user);
         validateUniqueId(user);

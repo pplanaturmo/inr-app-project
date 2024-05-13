@@ -24,15 +24,15 @@ public class Role {
 
     private UserRole role;
 
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    // @CreationTimestamp
+    // @Temporal(TemporalType.TIMESTAMP)
+    // @Column(name = "created_at", nullable = false, updatable = false)
+    // private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    // @UpdateTimestamp
+    // @Temporal(TemporalType.TIMESTAMP)
+    // @Column(name = "updated_at", nullable = false)
+    // private LocalDateTime updatedAt;
 
     public enum UserRole {
         PATIENT,

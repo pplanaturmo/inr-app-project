@@ -22,5 +22,10 @@ public class AuthenticatedUserResponse {
     private Long id;
     private String name;
     private String surname;
+    private Long department;
+    private Long supervisor;
+    private Long rangeInr;
+    private Long dosePattern;
     private Set<Role> roles;
+
 }

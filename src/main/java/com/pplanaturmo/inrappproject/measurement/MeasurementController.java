@@ -3,6 +3,7 @@ package com.pplanaturmo.inrappproject.measurement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pplanaturmo.inrappproject.alerts.AlertService;
@@ -22,16 +24,17 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 @RestController
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+        RequestMethod.DELETE })
 @RequestMapping("/api/measurement")
 public class MeasurementController {
-
 
     @Autowired
     private MeasurementService measurementService;
 
     @Autowired
     private DosageService dosageService;
-   
+
     @Autowired
     private AlertService alertService;
 
@@ -43,7 +46,7 @@ public class MeasurementController {
             @Valid @RequestBody MeasurementRequest measurementRequest) {
         Measurement measurement = measurementService.convertToMeasurement(userId, measurementRequest);
         Measurement newMeasurement = measurementService.createMeasurement(measurement);
-        
+
         alertService.createAlertIfNeeded(newMeasurement);
         dosageService.createDosagesByMeasurement(newMeasurement);
         Integer daysToNextMeasurement = newMeasurement.getDosagesValuesList().length;
@@ -87,6 +90,5 @@ public class MeasurementController {
     public void deleteMeasurement(@PathVariable("measurementId") @Valid @NotNull Long measurementId) {
         measurementService.deleteMeasurement(measurementId);
     }
-
 
 }

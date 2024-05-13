@@ -1,5 +1,6 @@
 package com.pplanaturmo.inrappproject.auth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pplanaturmo.inrappproject.auth.dtos.AuthenticatedUserResponse;
 import com.pplanaturmo.inrappproject.auth.dtos.AuthenticationRequest;
@@ -7,9 +8,11 @@ import com.pplanaturmo.inrappproject.auth.token.JwtService;
 import com.pplanaturmo.inrappproject.auth.token.Token;
 import com.pplanaturmo.inrappproject.auth.token.TokenRepository;
 import com.pplanaturmo.inrappproject.auth.token.TokenType;
+import com.pplanaturmo.inrappproject.role.Role;
 import com.pplanaturmo.inrappproject.role.RoleService;
 import com.pplanaturmo.inrappproject.user.User;
 import com.pplanaturmo.inrappproject.user.UserRepository;
+import com.pplanaturmo.inrappproject.user.UserService;
 import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +35,9 @@ public class AuthenticationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -48,6 +55,7 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     public AuthenticatedUserResponse register(UserRequest userRequest) {
+
         var user = User.builder()
                 .name(userRequest.getName())
                 .surname(userRequest.getSurname())
@@ -59,6 +67,7 @@ public class AuthenticationService {
                 .dataConsent(Boolean.parseBoolean(userRequest.getDataConsent()))
                 .build();
 
+        userService.validateUniqueFields(user);
         var savedUser = userRepository.save(user);
 
         roleService.assignPatientRole(savedUser);
@@ -72,9 +81,26 @@ public class AuthenticationService {
                 .id(savedUser.getId())
                 .name(savedUser.getName())
                 .surname(savedUser.getSurname())
+                .department(user.getDepartment() != null ? user.getDepartment().getId() : null)
+                .supervisor(user.getSupervisor() != null ? user.getSupervisor().getId() : null)
+                .rangeInr(user.getRangeInr() != null ? user.getRangeInr().getId() : null)
+                .dosePattern(user.getDosePattern() != null ? user.getDosePattern().getId() : null)
                 .roles(savedUser.getRoles())
                 .build();
     }
+
+    // @JsonProperty("access_token")
+    // private String accessToken;
+    // @JsonProperty("refresh_token")
+    // private String refreshToken;
+    // private Long id;
+    // private String name;
+    // private String surname;
+    // private Long department;
+    // private Long supervisor;
+    // private Long rangeInr;
+    // private Long dosePattern;
+    // private Set<Role> roles;
 
     public AuthenticatedUserResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
@@ -93,6 +119,10 @@ public class AuthenticationService {
                 .id(user.getId())
                 .name(user.getName())
                 .surname(user.getSurname())
+                .department(user.getDepartment() != null ? user.getDepartment().getId() : null)
+                .supervisor(user.getSupervisor() != null ? user.getSupervisor().getId() : null)
+                .rangeInr(user.getRangeInr() != null ? user.getRangeInr().getId() : null)
+                .dosePattern(user.getDosePattern() != null ? user.getDosePattern().getId() : null)
                 .roles(user.getRoles())
                 .build();
     }
