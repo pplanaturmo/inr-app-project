@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import com.pplanaturmo.inrappproject.auth.token.JwtAuthFilter;
 
 import lombok.RequiredArgsConstructor;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -75,17 +76,81 @@ public class SecurityConfiguration {
         // return http.build();
         // }
 
-        @Bean
-        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                http
-                                .csrf(csrf -> csrf.disable()) // Disable CSRF protection
-                                .authorizeHttpRequests(authorize -> authorize
-                                                .anyRequest().permitAll() // Permit all requests without authentication
-                                )
-                                .sessionManagement(management -> management
-                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        /*
+         * FUNCIONA
+         * 
+         * @Bean
+         * public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
+         * Exception {
+         * http
+         * .csrf(csrf -> csrf.disable()) // Disable CSRF protection
+         * .authorizeHttpRequests(authorize -> authorize
+         * .anyRequest().permitAll() // Permit all requests without authentication
+         * )
+         * .sessionManagement(management -> management
+         * .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+         * 
+         * return http.build();
+         * }
+         */
 
-                return http.build();
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http,
+                        AuthenticationProvider authenticationProvider)
+                        throws Exception {
+                return http
+                                .authorizeHttpRequests((authz) -> authz
+                                                .requestMatchers("/api/v1/auth/**",
+                                                                "/v2/api-docs",
+                                                                "/v3/api-docs",
+                                                                "/v3/api-docs/**",
+                                                                "/swagger-resources",
+                                                                "/swagger-resources/**",
+                                                                "/configuration/ui",
+                                                                "/configuration/security",
+                                                                "/swagger-ui/**",
+                                                                "/webjars/**",
+                                                                "/swagger-ui.html",
+                                                                "/api/user/create")
+                                                .permitAll()
+                                                .requestMatchers("/**").authenticated())
+                                .httpBasic(withDefaults()).csrf((csrf) -> csrf.disable())
+                                .sessionManagement((session) -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authenticationProvider(authenticationProvider)
+                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                                .build();
         }
+
+        // @Bean
+        // public SecurityFilterChain filterChain(HttpSecurity http,
+        // AuthenticationProvider authenticationProvider)
+        // throws Exception {
+        // return http
+        // .authorizeHttpRequests((authz) -> authz
+        // .requestMatchers("/api/v1/auth/**",
+        // "/v2/api-docs",
+        // "/v3/api-docs",
+        // "/v3/api-docs/**",
+        // "/swagger-resources",
+        // "/swagger-resources/**",
+        // "/configuration/ui",
+        // "/configuration/security",
+        // "/swagger-ui/**",
+        // "/webjars/**",
+        // "/swagger-ui.html",
+        // "/api/user/create")
+        // .permitAll())
+        // .authorizeHttpRequests((authz) -> authz
+        // .requestMatchers("/**")
+        // .authenticated())
+        // .httpBasic(withDefaults())
+        // .csrf((csrf) -> csrf.disable())
+        // .sessionManagement((session) -> session
+        // .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        // .authenticationProvider(authenticationProvider)
+        // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+        // .build();
+        // }
 
 }
