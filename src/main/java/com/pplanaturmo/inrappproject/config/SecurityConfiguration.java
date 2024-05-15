@@ -76,51 +76,65 @@ public class SecurityConfiguration {
         // return http.build();
         // }
 
-        /*
-         * FUNCIONA
-         * 
-         * @Bean
-         * public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
-         * Exception {
-         * http
-         * .csrf(csrf -> csrf.disable()) // Disable CSRF protection
-         * .authorizeHttpRequests(authorize -> authorize
-         * .anyRequest().permitAll() // Permit all requests without authentication
-         * )
-         * .sessionManagement(management -> management
-         * .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-         * 
-         * return http.build();
-         * }
-         */
+        // FUNCIONA
 
         @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http,
-                        AuthenticationProvider authenticationProvider)
-                        throws Exception {
-                return http
-                                .authorizeHttpRequests((authz) -> authz
-                                                .requestMatchers("/api/v1/auth/**",
-                                                                "/v2/api-docs",
-                                                                "/v3/api-docs",
-                                                                "/v3/api-docs/**",
-                                                                "/swagger-resources",
-                                                                "/swagger-resources/**",
-                                                                "/configuration/ui",
-                                                                "/configuration/security",
-                                                                "/swagger-ui/**",
-                                                                "/webjars/**",
-                                                                "/swagger-ui.html",
-                                                                "/api/user/create")
-                                                .permitAll()
-                                                .requestMatchers("/**").authenticated())
-                                .httpBasic(withDefaults()).csrf((csrf) -> csrf.disable())
-                                .sessionManagement((session) -> session
-                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                                .authenticationProvider(authenticationProvider)
-                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                                .build();
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .cors(cors -> cors.disable())
+                                .csrf(csrf -> csrf.disable())
+                                .authorizeHttpRequests(authorize -> authorize
+                                                .anyRequest().permitAll())
+                                .sessionManagement(management -> management
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+                return http.build();
         }
+
+        // @Bean
+        // public SecurityFilterChain filterChain(HttpSecurity http,
+        // AuthenticationProvider authenticationProvider)
+        // throws Exception {
+        // return http
+        // .authorizeHttpRequests((authz) -> authz
+        // .requestMatchers("/api/v1/auth/**",
+        // "/v2/api-docs",
+        // "/v3/api-docs",
+        // "/v3/api-docs/**",
+        // "/swagger-resources",
+        // "/swagger-resources/**",
+        // "/configuration/ui",
+        // "/configuration/security",
+        // "/swagger-ui/**",
+        // "/webjars/**",
+        // "/swagger-ui.html",
+        // "/api/user/create")
+        // .permitAll()
+        // .requestMatchers("/**").authenticated())
+        // .httpBasic(withDefaults()).csrf((csrf) -> csrf.disable())
+        // .sessionManagement((session) -> session
+        // .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        // .authenticationProvider(authenticationProvider)
+        // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+        // .build();
+        // }
+
+        // @Bean
+        // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // http
+        // .cors(AbstractHttpConfigurer::disable)
+        // .csrf(AbstractHttpConfigurer::disable)
+        // .authorizeHttpRequests(auth -> {
+        // //
+        // auth.requestMatchers(WHITE_LIST_URL).permitAll().anyRequest().authenticated();
+        // auth.requestMatchers("/api/v1/auth/**").permitAll().anyRequest()
+        // .authenticated();
+        // })
+        // .sessionManagement(session -> session
+        // .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        // return http.build();
+        // }
 
         // @Bean
         // public SecurityFilterChain filterChain(HttpSecurity http,
