@@ -1,6 +1,5 @@
 package com.pplanaturmo.inrappproject.measurement.dtos;
 
-
 import org.springframework.format.annotation.NumberFormat;
 
 import jakarta.validation.constraints.NotBlank;
@@ -14,10 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MeasurementRequest {
 
-
     @NumberFormat
     @NotNull(message = "Value is required")
-    @NotBlank(message = "Value is required")
     private Double value;
 
 }

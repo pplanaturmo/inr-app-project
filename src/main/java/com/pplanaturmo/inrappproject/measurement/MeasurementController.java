@@ -42,7 +42,7 @@ public class MeasurementController {
     private ExpectedMeasurementDateService expectedMeasurementDateService;
 
     @PostMapping("/create/{userId}")
-    public Measurement createMeasurement(@PathVariable("userId") @Valid @NotNull Long userId,
+    public void createMeasurement(@PathVariable("userId") @Valid @NotNull Long userId,
             @Valid @RequestBody MeasurementRequest measurementRequest) {
         Measurement measurement = measurementService.convertToMeasurement(userId, measurementRequest);
         Measurement newMeasurement = measurementService.createMeasurement(measurement);
@@ -53,7 +53,6 @@ public class MeasurementController {
         User measurementUser = measurement.getUser();
         expectedMeasurementDateService.generateExpectedMeasurementDate(daysToNextMeasurement, measurementUser);
 
-        return newMeasurement;
     }
 
     @GetMapping("/")

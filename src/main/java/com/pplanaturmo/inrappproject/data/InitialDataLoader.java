@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.pplanaturmo.inrappproject.data.initialRoles.InitialRoles;
+import com.pplanaturmo.inrappproject.data.initialUsers.UserDataLoader;
 import com.pplanaturmo.inrappproject.data.sintrom1warfarina1_3_5.InitialDataS1W135;
 import com.pplanaturmo.inrappproject.data.sintrom4warfarina10.InitialDataS4W10;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInr;
@@ -28,14 +29,17 @@ public class InitialDataLoader {
   @Autowired
   private InitialRoles initialRoles;
 
+  @Autowired
+  private UserDataLoader userDataLoader;
+
   @PostConstruct
-  public void loadInitialData() {
+  public void loadInitialData() throws Exception {
 
     loadInrRanges();
     initialDataS4W10.loadDosePatternsS4W10();
-    initialDataS1W135.loadDosePatternsS1W135();
+    // initialDataS1W135.loadDosePatternsS1W135();
     initialRoles.loadRoles();
-
+    userDataLoader.loadUser();
   }
 
   public void loadInrRanges() {

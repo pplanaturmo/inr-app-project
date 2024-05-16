@@ -105,8 +105,9 @@ public class DosageService {
     }
 
     private Boolean dosagesStartNexDay(Measurement measurement, LocalDate dosageDate) {
+        boolean doseExists = getDosageByDate(measurement.getUser().getId(), measurement.getDate()) != null;
 
-        return getDosageByDate(measurement.getUser().getId(), dosageDate).getTaken();
+        return doseExists ? getDosageByDate(measurement.getUser().getId(), measurement.getDate()).getTaken() : false;
     }
 
     private void createDosagesHighValue(Measurement measurement, LocalDate dosageDate, Double[] dosagesList) {
