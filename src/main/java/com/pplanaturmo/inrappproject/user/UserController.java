@@ -20,10 +20,17 @@ import com.pplanaturmo.inrappproject.user.dtos.UpdateUserPattern;
 import com.pplanaturmo.inrappproject.user.dtos.UpdateUserSupervisor;
 import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 @RestController
+@Tag(name = "User Management", description = "Operations related to user management")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
         RequestMethod.DELETE })
 @RequestMapping("/api/user")
@@ -33,7 +40,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create")
-    public User createUser(@Valid @RequestBody UserRequest createUserRequest) {
+    @Operation(summary = "Create a new user", description = "This endpoint allows you to create a new user by providing the necessary details.", responses = {
+            @ApiResponse(responseCode = "201", description = "User created successfully", content = @Content(schema = @Schema(implementation = User.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+
+    public User createUser(
+            @Parameter(description = "Details of the user to be created", required = true) @Valid @RequestBody UserRequest createUserRequest) {
         User user = userService.convertToUser(createUserRequest);
 
         return userService.createUser(user);

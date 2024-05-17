@@ -28,6 +28,8 @@ import com.pplanaturmo.inrappproject.professional.Professional;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInr;
 import com.pplanaturmo.inrappproject.role.Role;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -36,6 +38,7 @@ import com.pplanaturmo.inrappproject.role.Role;
 @Table(name = "users")
 public class User implements UserDetails {
 
+    @Schema(description = "The unique identifier of the user")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
