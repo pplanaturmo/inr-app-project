@@ -7,10 +7,12 @@ import com.pplanaturmo.inrappproject.auth.token.JwtService;
 import com.pplanaturmo.inrappproject.auth.token.Token;
 import com.pplanaturmo.inrappproject.auth.token.TokenRepository;
 import com.pplanaturmo.inrappproject.auth.token.TokenType;
+import com.pplanaturmo.inrappproject.role.Role;
 import com.pplanaturmo.inrappproject.role.RoleService;
 import com.pplanaturmo.inrappproject.user.User;
 import com.pplanaturmo.inrappproject.user.UserRepository;
 import com.pplanaturmo.inrappproject.user.UserService;
+import com.pplanaturmo.inrappproject.user.dtos.UpdateUserRole;
 import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,8 +68,11 @@ public class AuthenticationService {
 
         userService.validateUniqueFields(user);
         var savedUser = userRepository.save(user);
+        UpdateUserRole updateUserRole = new UpdateUserRole();
+        updateUserRole.setUserId(savedUser.getId());
+        updateUserRole.setAssignedRole(Role.UserRole.PATIENT.toString());
 
-        roleService.assignPatientRole(savedUser);
+        roleService.assignRole(updateUserRole);
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
