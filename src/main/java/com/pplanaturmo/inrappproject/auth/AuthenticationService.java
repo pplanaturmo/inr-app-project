@@ -1,6 +1,5 @@
 package com.pplanaturmo.inrappproject.auth;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pplanaturmo.inrappproject.auth.dtos.AuthenticatedUserResponse;
 import com.pplanaturmo.inrappproject.auth.dtos.AuthenticationRequest;
@@ -8,7 +7,6 @@ import com.pplanaturmo.inrappproject.auth.token.JwtService;
 import com.pplanaturmo.inrappproject.auth.token.Token;
 import com.pplanaturmo.inrappproject.auth.token.TokenRepository;
 import com.pplanaturmo.inrappproject.auth.token.TokenType;
-import com.pplanaturmo.inrappproject.role.Role;
 import com.pplanaturmo.inrappproject.role.RoleService;
 import com.pplanaturmo.inrappproject.user.User;
 import com.pplanaturmo.inrappproject.user.UserRepository;
@@ -27,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor

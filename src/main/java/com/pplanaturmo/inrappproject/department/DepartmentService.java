@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pplanaturmo.inrappproject.department.dtos.DepartmentRequest;
 import com.pplanaturmo.inrappproject.professional.Professional;
 import com.pplanaturmo.inrappproject.professional.ProfessionalRepository;
 
@@ -16,7 +17,6 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class DepartmentService {
 
-    
     @Autowired
     private DepartmentRepository departmentRepository;
 
@@ -27,42 +27,47 @@ public class DepartmentService {
         return departmentRepository.save(department);
     }
 
+    public Department convertToDepartment(DepartmentRequest createDepartmentRequest) {
+        Department department = new Department();
+
+        department.setName(createDepartmentRequest.getName());
+        department.setCity(createDepartmentRequest.getCity());
+
+        return department;
+    }
+
     public Optional<Department> getDepartmentById(Long id) {
         return departmentRepository.findById(id);
     }
 
-   
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
     }
-
 
     public Department updateDepartment(Department user) {
         return departmentRepository.save(user);
     }
 
-    
     public Department assignManagerToDepartment(Long departmentId, Long professionalId) {
-      
-                Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new EntityNotFoundException("Department not found with id: " + departmentId));
-    
 
-        if(professionalId == -1){
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Department not found with id: " + departmentId));
+
+        if (professionalId == -1) {
             department.setProfessional(null);
-        }else{
+        } else {
 
             Professional professional = professionalRepository.findById(professionalId)
-                    .orElseThrow(() -> new EntityNotFoundException("Professional not found with id: " + professionalId));
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("Professional not found with id: " + professionalId));
             department.setProfessional(professional);
-        }        
-        
+        }
+
         return departmentRepository.save(department);
     }
 
     public void deleteDepartmentById(Long id) {
         departmentRepository.deleteById(id);
     }
-
 
 }

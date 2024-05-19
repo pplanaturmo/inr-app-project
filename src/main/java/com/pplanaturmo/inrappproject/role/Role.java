@@ -4,13 +4,10 @@ import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+@Schema(description = "Modelo de datos de la entidad Rol")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,21 +15,13 @@ import jakarta.persistence.*;
 @Table(name = "roles")
 public class Role {
 
+    @Schema(description = "Identificador único del Rol")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Schema(description = "Tipo de rol")
     private UserRole role;
-
-    // @CreationTimestamp
-    // @Temporal(TemporalType.TIMESTAMP)
-    // @Column(name = "created_at", nullable = false, updatable = false)
-    // private LocalDateTime createdAt;
-
-    // @UpdateTimestamp
-    // @Temporal(TemporalType.TIMESTAMP)
-    // @Column(name = "updated_at", nullable = false)
-    // private LocalDateTime updatedAt;
 
     public enum UserRole {
         PATIENT,
@@ -41,15 +30,3 @@ public class Role {
         ADMIN
     }
 }
-
-// @Id
-// @GeneratedValue(strategy = GenerationType.IDENTITY)
-// private Long id;
-
-// @Enumerated(EnumType.STRING)
-// @Column(name = "role", nullable = false)
-// private UserRole assignedRole;
-
-// @ManyToOne(fetch = FetchType.LAZY)
-// @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-// private User user;
