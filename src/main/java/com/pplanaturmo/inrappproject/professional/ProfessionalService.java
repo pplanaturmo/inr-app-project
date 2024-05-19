@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pplanaturmo.inrappproject.professional.Professional.TypeEnum;
+import com.pplanaturmo.inrappproject.professional.dtos.ProfessionalRequest;
 import com.pplanaturmo.inrappproject.user.User;
 
 import jakarta.transaction.Transactional;
@@ -13,16 +15,22 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class ProfessionalService {
 
-
     @Autowired
     private ProfessionalRepository professionalRepository;
 
-     
-     public Professional createProfessional(Professional professional) {
+    public Professional createProfessional(Professional professional) {
         return professionalRepository.save(professional);
     }
 
-   
+    public Professional convertToProfessional(ProfessionalRequest professionalRequest) {
+        Professional convertedProfessional = new Professional();
+        convertedProfessional.setRegisterNumber(professionalRequest.getRegisterNumber());
+        convertedProfessional.setUserId(professionalRequest.getUserId());
+        convertedProfessional.setType(TypeEnum.valueOf(professionalRequest.getType()));
+
+        return convertedProfessional;
+    }
+
     public List<Professional> getAllProfessionals() {
         return professionalRepository.findAll();
     }
@@ -40,7 +48,7 @@ public class ProfessionalService {
     }
 
     public List<User> getSupervisedUsers(Long professionalId) {
-    
+
         Professional professional = professionalRepository.findById(professionalId)
                 .orElseThrow(() -> new RuntimeException("Professional not found"));
 
