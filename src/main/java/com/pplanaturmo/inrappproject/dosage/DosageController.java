@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,7 +48,7 @@ public class DosageController {
         return new ResponseEntity<>(dosage, HttpStatus.OK);
     }
 
-    @GetMapping("/between-dates")
+    @PostMapping("/between-dates")
     @Operation(summary = "Obtener dosis entre fechas", description = "Recuperar un listado de dosis entre fechas específicas para un usuario", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Date range for retrieving dosages", required = true, content = @Content(schema = @Schema(implementation = DatesBetweenDto.class))), responses = {
             @ApiResponse(responseCode = "200", description = "Listado de dosis entre fechas para un usuario", content = @Content(schema = @Schema(implementation = Dosage.class))),
             @ApiResponse(responseCode = "400", description = "Datos enviados no validos"),
