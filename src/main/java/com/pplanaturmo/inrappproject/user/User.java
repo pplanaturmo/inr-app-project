@@ -8,11 +8,13 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.pplanaturmo.inrappproject.department.Department;
@@ -94,16 +96,8 @@ public class User implements UserDetails {
     private DosePattern dosePattern;
 
     @Schema(description = "Rol del usuario")
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
-    private Role userRole;
-
-    // @Schema(description = "Listado de roles del usuario")
-    // @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    // @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id",
-    // referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name =
-    // "role_id", referencedColumnName = "id"))
-    // private Set<Role> roles;
+    @Column(name = "role_id", nullable = false)
+    private String userRole;
 
     @Schema(description = "Marca de tiempo de creación")
     @CreationTimestamp
@@ -131,40 +125,91 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userRole));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
     public String getUsername() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isAccountNonExpired'");
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isAccountNonLocked'");
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isCredentialsNonExpired'");
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isEnabled'");
+        return true;
     }
 
+    // @Schema(description = "Rol del usuario")
+    // @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    // @JoinColumn(name = "role_id", referencedColumnName = "id")
+    // private Role userRole;
+
+    // @Schema(description = "Listado de roles del usuario")
+    // @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    // @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id",
+    // referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name =
+    // "role_id", referencedColumnName = "id"))
+    // private Set<Role> roles;
+
+    // @Override
+    // public Collection<? extends GrantedAuthority> getAuthorities() {
+    // if (userRole == null) {
+    // return Collections.emptyList();
+    // }
+
+    // return Collections.singletonList(new SimpleGrantedAuthority(userRole));
+    // }
+
+    // @Override
+    // public String getUsername() {
+    // return email;
+    // }
+
+    // @Override
+    // public String getPassword() {
+    // return password;
+    // }
+
+    // @Override
+    // public boolean isAccountNonExpired() {
+    // return true;
+    // }
+
+    // @Override
+    // public boolean isAccountNonLocked() {
+    // return true;
+    // }
+
+    // @Override
+    // public boolean isCredentialsNonExpired() {
+    // return true;
+    // }
+
+    // @Override
+    // public boolean isEnabled() {
+    // return true;
+    // }
+
+    // ---------------------------------------
     // @Override
     // public Collection<? extends GrantedAuthority> getAuthorities() {
 

@@ -185,7 +185,8 @@ public class UserService {
     @Transactional
     public void assignRoleToUser(Long userId, String roleName) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " +
+                        userId));
 
         Role.UserRole userRoleEnum;
         try {
@@ -195,9 +196,11 @@ public class UserService {
         }
 
         Role role = roleRepository.findByRole(userRoleEnum)
-                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName));
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: " +
+                        roleName));
 
-        user.setUserRole(role);
+        user.setUserRole(role.getRole().toString());
+        // user.setUserRole(role);
         userRepository.save(user);
     }
 

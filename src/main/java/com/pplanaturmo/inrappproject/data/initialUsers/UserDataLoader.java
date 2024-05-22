@@ -40,7 +40,8 @@ public class UserDataLoader {
         user.setSurname("Patient Surname");
         user.setEmail("patient@example.com");
         user.setDataConsent(true);
-        user.setPassword(passwordEncoder.encode("12341234")); // Encoded password
+        user.setPassword(passwordEncoder.encode("12341234"));
+        user.setUserRole("PATIENT");
 
         RangeInr rangeInr = rangeInrRepository.getReferenceById(1L);
         DosePattern dosePattern = dosePatternRepository.getReferenceById(15L);
@@ -60,7 +61,7 @@ public class UserDataLoader {
         user2.setEmail("professional@example.com");
         user2.setDataConsent(true);
         user2.setPassword(passwordEncoder.encode("12341234")); // Encoded password
-
+        user2.setUserRole("PATIENT");
         RangeInr rangeInr2 = rangeInrRepository.getReferenceById(1L);
         DosePattern dosePattern2 = dosePatternRepository.getReferenceById(13L);
 

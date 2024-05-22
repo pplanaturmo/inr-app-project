@@ -65,19 +65,15 @@ public class AuthenticationService {
                 .build();
 
         userService.validateUniqueEmail(user);
-        userService.assignRoleToUser(null, null);
 
-        Optional<Role> patientRole = roleService.findRoleByString("PATIENT");
-        if (patientRole.isPresent()) {
-            user.setUserRole(patientRole.get());
-        }
+        user.setUserRole("PATIENT");
+
+        // Optional<Role> patientRole = roleService.findRoleByString("PATIENT");
+        // if (patientRole.isPresent()) {
+        // user.setUserRole(patientRole.get());
+        // }
 
         var savedUser = userRepository.save(user);
-        // UpdateUserRole updateUserRole = new UpdateUserRole();
-        // updateUserRole.setUserId(savedUser.getId());
-        // updateUserRole.setAssignedRole(Role.UserRole.PATIENT.toString());
-
-        // roleService.assignRole(updateUserRole);
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -92,22 +88,9 @@ public class AuthenticationService {
                 .supervisor(user.getSupervisor() != null ? user.getSupervisor().getId() : null)
                 .rangeInr(user.getRangeInr() != null ? user.getRangeInr().getId() : null)
                 .dosePattern(user.getDosePattern() != null ? user.getDosePattern().getId() : null)
-                .role(savedUser.getUserRole())
+                .role(user.getUserRole())
                 .build();
     }
-
-    // @JsonProperty("access_token")
-    // private String accessToken;
-    // @JsonProperty("refresh_token")
-    // private String refreshToken;
-    // private Long id;
-    // private String name;
-    // private String surname;
-    // private Long department;
-    // private Long supervisor;
-    // private Long rangeInr;
-    // private Long dosePattern;
-    // private Set<Role> roles;
 
     public AuthenticatedUserResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(

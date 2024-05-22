@@ -48,6 +48,9 @@ public class AuthenticatedUserResponse {
     private Long dosePattern;
 
     @Schema(description = "Listado de roles del usuario")
-    private Role role;
+    private String role;
+
+    // @Schema(description = "Listado de roles del usuario")
+    // private Role role;
 
 }

@@ -148,17 +148,17 @@ public class UserController {
         }
 
         @PutMapping("/{userId}/role")
-        @Operation(summary = "Establecer rol de un usuario", description = "Asignar rol a ukn usuario a partir de su ID.", responses = {
+        @Operation(summary = "Establecer rol de un usuario", description = "Asignar rol a un usuario a partir de su ID.", responses = {
                         @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente", content = @Content(schema = @Schema(implementation = User.class))),
                         @ApiResponse(responseCode = "400", description = "Datos recibidos no validos"),
                         @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
         })
         public void setRole(
-                        @Parameter(description = "ID del usuario al que se le asigna un patrón de dosificación", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
+                        @Parameter(description = "ID del usuario al que se le asigna un rol", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
                         @RequestBody @Valid UpdateUserRole updateUserRole) {
-                String roleName = updateUserRole.getAssignedRole();
-                userService.assignRoleToUser(userId, roleName);
+                // String roleName = updateUserRole.getAssignedRole();
+                userService.assignRoleToUser(userId, updateUserRole.getAssignedRole());
         }
 
         @DeleteMapping("/{userId}")
