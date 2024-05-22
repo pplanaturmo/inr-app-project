@@ -17,20 +17,20 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByDosePattern(DosePattern dosePattern);
 
-    Optional<User> findByIdCard(String idCard);
-
     Optional<User> findByEmail(String email);
-
-    boolean existsByEmailAndIdNot(String email, Long id);
-
-    boolean existsByIdCardAndIdNot(String idCard, Long id);
-
-    boolean existsByHealthCardAndIdNot(String healthCard, Long id);
 
     boolean existsByEmail(String email);
 
-    boolean existsByIdCard(String idCard);
+    boolean existsByEmailAndIdNot(String email, Long id);
 
-    boolean existsByHealthCard(String healthCard);
+    // Optional<User> findByIdCard(String idCard);
+
+    // boolean existsByIdCardAndIdNot(String idCard, Long id);
+
+    // boolean existsByHealthCardAndIdNot(String healthCard, Long id);
+
+    // boolean existsByIdCard(String idCard);
+
+    // boolean existsByHealthCard(String healthCard);
 
 }

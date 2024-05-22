@@ -48,6 +48,6 @@ public class AuthenticatedUserResponse {
     private Long dosePattern;
 
     @Schema(description = "Listado de roles del usuario")
-    private Set<Role> roles;
+    private Role role;
 
 }

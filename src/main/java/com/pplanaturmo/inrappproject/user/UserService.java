@@ -1,6 +1,7 @@
 package com.pplanaturmo.inrappproject.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,15 +11,21 @@ import org.springframework.validation.annotation.Validated;
 import com.pplanaturmo.inrappproject.auth.dtos.AuthenticatedUserResponse;
 import com.pplanaturmo.inrappproject.department.Department;
 import com.pplanaturmo.inrappproject.department.DepartmentRepository;
+import com.pplanaturmo.inrappproject.dosePattern.DosePattern;
+import com.pplanaturmo.inrappproject.dosePattern.DosePatternRepository;
 import com.pplanaturmo.inrappproject.professional.Professional;
 import com.pplanaturmo.inrappproject.professional.ProfessionalRepository;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInr;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInrRepository;
+import com.pplanaturmo.inrappproject.role.Role;
+import com.pplanaturmo.inrappproject.role.RoleRepository;
 import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 import com.pplanaturmo.inrappproject.user.exceptions.AlreadyExistsException;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @Service
 @Transactional
@@ -38,22 +45,28 @@ public class UserService {
     private RangeInrRepository rangeInrRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private DosePatternRepository dosePatternRepository;
+
     public User createUser(User user) {
-        validateUniqueFields(user);
+        validateUniqueEmail(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
     // Checks that the three fields are unique in the database
-    public void validateUniqueFields(User user) {
+    // public void validateUniqueFields(User user) {
 
-        validateUniqueEmail(user);
-        validateUniqueId(user);
-        validateUniqueHealthCard(user);
+    // validateUniqueEmail(user);
+    // validateUniqueId(user);
+    // validateUniqueHealthCard(user);
 
-    }
+    // }
 
     public void validateUniqueEmail(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
@@ -61,17 +74,19 @@ public class UserService {
         }
     }
 
-    public void validateUniqueId(User user) {
-        if (userRepository.existsByIdCard(user.getIdCard())) {
-            throw new AlreadyExistsException("ID card already exists: " + user.getIdCard());
-        }
-    }
+    // public void validateUniqueId(User user) {
+    // if (userRepository.existsByIdCard(user.getIdCard())) {
+    // throw new AlreadyExistsException("ID card already exists: " +
+    // user.getIdCard());
+    // }
+    // }
 
-    public void validateUniqueHealthCard(User user) {
-        if (userRepository.existsByHealthCard(user.getHealthCard())) {
-            throw new AlreadyExistsException("Health card already exists: " + user.getHealthCard());
-        }
-    }
+    // public void validateUniqueHealthCard(User user) {
+    // if (userRepository.existsByHealthCard(user.getHealthCard())) {
+    // throw new AlreadyExistsException("Health card already exists: " +
+    // user.getHealthCard());
+    // }
+    // }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -82,7 +97,7 @@ public class UserService {
     }
 
     public User updateUser(User user) {
-        validateUniqueFields(user);
+        validateUniqueEmail(user);
         return userRepository.save(user);
     }
 
@@ -103,10 +118,10 @@ public class UserService {
 
         user.setName(createUserRequest.getName());
         user.setSurname(createUserRequest.getSurname());
-        user.setIdCard(createUserRequest.getIdCard());
-        user.setHealthCard(createUserRequest.getHealthCard());
+        // user.setIdCard(createUserRequest.getIdCard());
+        // user.setHealthCard(createUserRequest.getHealthCard());
         user.setEmail(createUserRequest.getEmail());
-        user.setPhone(createUserRequest.getPhone());
+        // user.setPhone(createUserRequest.getPhone());
         boolean incomingDataConsent = Boolean.parseBoolean(createUserRequest.getDataConsent());
 
         user.setDataConsent(incomingDataConsent);
@@ -167,4 +182,41 @@ public class UserService {
         return new AuthenticatedUserResponse();
     }
 
+    @Transactional
+    public void assignRoleToUser(Long userId, String roleName) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+        Role.UserRole userRoleEnum;
+        try {
+            userRoleEnum = Role.UserRole.valueOf(roleName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid role name: " + roleName);
+        }
+
+        Role role = roleRepository.findByRole(userRoleEnum)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleName));
+
+        user.setUserRole(role);
+        userRepository.save(user);
+    }
+
+    public User assignInrToUser(@Valid @NotNull Long userId, Long rangeId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        RangeInr range = rangeInrRepository.getReferenceById(rangeId);
+        user.setRangeInr(range);
+        return userRepository.save(user);
+
+    }
+
+    public User assignDosePastternToUser(@Valid @NotNull Long userId, Long patternId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        DosePattern pattern = dosePatternRepository.getReferenceById(patternId);
+
+        user.setDosePattern(pattern);
+        return userRepository.save(user);
+
+    }
 }

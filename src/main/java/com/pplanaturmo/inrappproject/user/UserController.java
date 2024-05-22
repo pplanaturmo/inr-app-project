@@ -3,6 +3,7 @@ package com.pplanaturmo.inrappproject.user;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +13,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pplanaturmo.inrappproject.user.dtos.UpdateUserDepartment;
 import com.pplanaturmo.inrappproject.user.dtos.UpdateUserInrRange;
 import com.pplanaturmo.inrappproject.user.dtos.UpdateUserPattern;
+import com.pplanaturmo.inrappproject.user.dtos.UpdateUserRole;
 import com.pplanaturmo.inrappproject.user.dtos.UpdateUserSupervisor;
 import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 
@@ -123,25 +126,39 @@ public class UserController {
                         @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
         })
-        public User set(
+        public void setInrRange(
                         @Parameter(description = "ID del usuario al que se le asigna un rango terapéutico", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
                         @RequestBody @Valid UpdateUserInrRange updateUserInrRange) {
                 Long rangeId = updateUserInrRange.getRangeId();
-                return userService.assignDepartmentToUser(userId, rangeId);
+                userService.assignInrToUser(userId, rangeId);
         }
 
         @PutMapping("/{userId}/dose-pattern")
-        @Operation(summary = "Establecer patrón de dosificación de un usuario", description = "Set the dose pattern for a user by their unique ID.", responses = {
+        @Operation(summary = "Establecer patrón de dosificación de un usuario", description = "Establecer patrón de dosificación del usuario a partir de su ID.", responses = {
                         @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente", content = @Content(schema = @Schema(implementation = User.class))),
                         @ApiResponse(responseCode = "400", description = "Datos recibidos no validos"),
                         @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
         })
-        public User set(
+        public void setDosePattern(
                         @Parameter(description = "ID del usuario al que se le asigna un patrón de dosificación", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
                         @RequestBody @Valid UpdateUserPattern updateUserPattern) {
                 Long patternId = updateUserPattern.getPatternId();
-                return userService.assignDepartmentToUser(userId, patternId);
+                userService.assignDosePastternToUser(userId, patternId);
+        }
+
+        @PutMapping("/{userId}/role")
+        @Operation(summary = "Establecer rol de un usuario", description = "Asignar rol a ukn usuario a partir de su ID.", responses = {
+                        @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente", content = @Content(schema = @Schema(implementation = User.class))),
+                        @ApiResponse(responseCode = "400", description = "Datos recibidos no validos"),
+                        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+                        @ApiResponse(responseCode = "500", description = "Error interno de servidor")
+        })
+        public void setRole(
+                        @Parameter(description = "ID del usuario al que se le asigna un patrón de dosificación", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
+                        @RequestBody @Valid UpdateUserRole updateUserRole) {
+                String roleName = updateUserRole.getAssignedRole();
+                userService.assignRoleToUser(userId, roleName);
         }
 
         @DeleteMapping("/{userId}")

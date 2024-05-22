@@ -27,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -60,19 +61,23 @@ public class AuthenticationService {
                 .surname(userRequest.getSurname())
                 .email(userRequest.getEmail())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
-                .idCard(userRequest.getIdCard())
-                .healthCard(userRequest.getHealthCard())
-                .phone(userRequest.getPhone())
                 .dataConsent(Boolean.parseBoolean(userRequest.getDataConsent()))
                 .build();
 
-        userService.validateUniqueFields(user);
-        var savedUser = userRepository.save(user);
-        UpdateUserRole updateUserRole = new UpdateUserRole();
-        updateUserRole.setUserId(savedUser.getId());
-        updateUserRole.setAssignedRole(Role.UserRole.PATIENT.toString());
+        userService.validateUniqueEmail(user);
+        userService.assignRoleToUser(null, null);
 
-        roleService.assignRole(updateUserRole);
+        Optional<Role> patientRole = roleService.findRoleByString("PATIENT");
+        if (patientRole.isPresent()) {
+            user.setUserRole(patientRole.get());
+        }
+
+        var savedUser = userRepository.save(user);
+        // UpdateUserRole updateUserRole = new UpdateUserRole();
+        // updateUserRole.setUserId(savedUser.getId());
+        // updateUserRole.setAssignedRole(Role.UserRole.PATIENT.toString());
+
+        // roleService.assignRole(updateUserRole);
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -87,7 +92,7 @@ public class AuthenticationService {
                 .supervisor(user.getSupervisor() != null ? user.getSupervisor().getId() : null)
                 .rangeInr(user.getRangeInr() != null ? user.getRangeInr().getId() : null)
                 .dosePattern(user.getDosePattern() != null ? user.getDosePattern().getId() : null)
-                .roles(savedUser.getRoles())
+                .role(savedUser.getUserRole())
                 .build();
     }
 
@@ -125,7 +130,7 @@ public class AuthenticationService {
                 .supervisor(user.getSupervisor() != null ? user.getSupervisor().getId() : null)
                 .rangeInr(user.getRangeInr() != null ? user.getRangeInr().getId() : null)
                 .dosePattern(user.getDosePattern() != null ? user.getDosePattern().getId() : null)
-                .roles(user.getRoles())
+                .role(user.getUserRole())
                 .build();
     }
 

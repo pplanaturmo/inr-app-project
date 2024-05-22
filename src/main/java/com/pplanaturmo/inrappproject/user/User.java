@@ -8,15 +8,11 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.pplanaturmo.inrappproject.department.Department;
@@ -66,21 +62,22 @@ public class User implements UserDetails {
     @Column(name = "surname", nullable = false)
     private String surname;
 
-    @Schema(description = "Documento nacional de identidad o equivalente del usuario")
-    @Column(name = "id_card", nullable = false)
-    private String idCard;
+    // @Schema(description = "Documento nacional de identidad o equivalente del
+    // usuario")
+    // @Column(name = "id_card", nullable = false)
+    // private String idCard;
 
-    @Schema(description = "Tarjeta sanitaria del usuario")
-    @Column(name = "health_card", nullable = false)
-    private String healthCard;
+    // @Schema(description = "Tarjeta sanitaria del usuario")
+    // @Column(name = "health_card", nullable = false)
+    // private String healthCard;
 
     @Schema(description = "Correo eléctronico del usuario")
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Schema(description = "Teléfono de contacto del usuario")
-    @Column(name = "phone", nullable = false)
-    private Long phone;
+    // @Schema(description = "Teléfono de contacto del usuario")
+    // @Column(name = "phone", nullable = false)
+    // private Long phone;
 
     @Schema(description = "Consentimiento de tratamiento estadístico de datos del usuario")
     @Column(name = "data_consent", nullable = false)
@@ -95,6 +92,18 @@ public class User implements UserDetails {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dose_pattern_id", referencedColumnName = "id")
     private DosePattern dosePattern;
+
+    @Schema(description = "Rol del usuario")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    private Role userRole;
+
+    // @Schema(description = "Listado de roles del usuario")
+    // @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    // @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id",
+    // referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name =
+    // "role_id", referencedColumnName = "id"))
+    // private Set<Role> roles;
 
     @Schema(description = "Marca de tiempo de creación")
     @CreationTimestamp
@@ -120,63 +129,94 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Observation> observations;
 
-    @Schema(description = "Listado de roles del usuario")
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<Role> roles;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        if (roles == null) {
-            return Collections.emptyList(); // Return an empty list if roles is null
-        }
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.toString()))
-                .collect(Collectors.toList());
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
     }
 
     @Override
     public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isAccountNonExpired'");
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isAccountNonLocked'");
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isCredentialsNonExpired'");
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isEnabled'");
     }
 
-    public void addRole(Role role) {
-        this.roles.add(role);
-    }
+    // @Override
+    // public Collection<? extends GrantedAuthority> getAuthorities() {
 
-    public void removeRole(Role role) {
-        this.roles.remove(role);
-    }
+    // if (roles == null) {
+    // return Collections.emptyList(); // Return an empty list if roles is null
+    // }
+    // return roles.stream()
+    // .map(role -> new SimpleGrantedAuthority(role.toString()))
+    // .collect(Collectors.toList());
+    // }
 
-    public boolean hasRole(Role.UserRole userRole) {
-        return roles.stream().anyMatch(role -> role.getRole().equals(userRole));
-    }
+    // @Override
+    // public String getUsername() {
+    // return email;
+    // }
+
+    // @Override
+    // public String getPassword() {
+    // return password;
+    // }
+
+    // @Override
+    // public boolean isAccountNonExpired() {
+    // return true;
+    // }
+
+    // @Override
+    // public boolean isAccountNonLocked() {
+    // return true;
+    // }
+
+    // @Override
+    // public boolean isCredentialsNonExpired() {
+    // return true;
+    // }
+
+    // @Override
+    // public boolean isEnabled() {
+    // return true;
+    // }
+
+    // public void addRole(Role role) {
+    // this.roles.add(role);
+    // }
+
+    // public void removeRole(Role role) {
+    // this.roles.remove(role);
+    // }
+
+    // public boolean hasRole(Role.UserRole userRole) {
+    // return roles.stream().anyMatch(role -> role.getRole().equals(userRole));
+    // }
 
 }
 

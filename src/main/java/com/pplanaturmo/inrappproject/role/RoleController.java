@@ -41,18 +41,6 @@ public class RoleController {
         return roleService.getAllRoles();
     }
 
-    @PostMapping("/assign")
-    @Operation(summary = "Asignar rol a un usuario", description = "Asignar rol específico a un usuario a partir de su ID y el rol.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos del usuario y del rol a asignar", required = true, content = @Content(schema = @Schema(implementation = UpdateUserRole.class))), responses = {
-            @ApiResponse(responseCode = "200", description = "Rol asignado con éxito"),
-            @ApiResponse(responseCode = "400", description = "Datos invalidos"),
-            @ApiResponse(responseCode = "404", description = "Usuario o rol no encontrado"),
-            @ApiResponse(responseCode = "500", description = "Error interno de servidor")
-    })
-    public ResponseEntity<Void> assignRole(@Valid @RequestBody UpdateUserRole updateUserRole) {
-        roleService.assignRole(updateUserRole);
-        return ResponseEntity.ok().build();
-    }
-
 }
 
 // package com.pplanaturmo.inrappproject.role;
