@@ -73,6 +73,6 @@ public class UserDataLoader {
         // } else {
         // user.setUserRole(null);
         // }
-        userRepository.save(user);
+        userRepository.save(user2);
     }
 }

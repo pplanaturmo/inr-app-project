@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class MeasurementRequest {
 
     @Schema(description = "Resultado de la medición enviado")
-    @NumberFormat
+    // @NumberFormat(pattern = "needs to be a number")
     @NotNull(message = "Value is required")
     private Double value;
 

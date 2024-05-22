@@ -56,6 +56,7 @@ public class DosageService {
     }
 
     public Dosage getDosageByDate(Long userId, LocalDate doseDate) {
+
         return dosageRepository.findByMeasurement_User_IdAndDoseDate(userId, doseDate)
                 .orElse(null);
     }
@@ -143,9 +144,21 @@ public class DosageService {
     }
 
     private void createDosages(Measurement measurement, LocalDate dosageDate, Double[] dosagesList) {
+        Long userId = measurement.getId();
         for (int i = 0; i < dosagesList.length; i++) {
-            saveDosage(measurement, dosageDate, dosagesList[i]);
-            dosageDate = dosageDate.plusDays(1);
+
+            if (dosageDateExists(userId, dosageDate)) {
+                Dosage existingDosage = getDosageByDate(userId, dosageDate);
+                existingDosage.setMeasurement(measurement);
+                existingDosage.setDoseValue(measurement.getValue());
+                updateDosage(existingDosage);
+                dosageDate = dosageDate.plusDays(1);
+
+            } else {
+                saveDosage(measurement, dosageDate, dosagesList[i]);
+                dosageDate = dosageDate.plusDays(1);
+
+            }
         }
     }
 
