@@ -20,4 +20,4 @@ import lombok.NoArgsConstructor;
         private Boolean taken;
 
     }
-}
+
