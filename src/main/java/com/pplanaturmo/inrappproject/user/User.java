@@ -1,5 +1,6 @@
 package com.pplanaturmo.inrappproject.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -112,14 +113,17 @@ public class User implements UserDetails {
     private LocalDateTime updatedAt;
 
     @Schema(description = "Listado de medidas tomadas por el usuario")
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Measurement> measurements;
 
     @Schema(description = "Listado de fechas previstas de toma de medida del usuario")
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ExpectedMeasurementDate> expectedMeasurementDates;
 
     @Schema(description = "Listado de observaciones del usario")
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Observation> observations;
 

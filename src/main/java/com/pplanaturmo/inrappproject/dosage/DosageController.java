@@ -2,17 +2,15 @@ package com.pplanaturmo.inrappproject.dosage;
 
 import java.util.List;
 
+import com.pplanaturmo.inrappproject.dosage.dtos.DosageRequest;
+import com.pplanaturmo.inrappproject.dosage.dtos.DosageResponse;
+import com.pplanaturmo.inrappproject.user.User;
+import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.pplanaturmo.inrappproject.aggregatedDtos.DatesBetweenDto;
 
@@ -54,7 +52,7 @@ public class DosageController {
             @ApiResponse(responseCode = "400", description = "Datos enviados no validos"),
             @ApiResponse(responseCode = "500", description = "Error interno de servidor")
     })
-    public List<Dosage> getDosagesBetweenDates(@Valid @RequestBody DatesBetweenDto datesBetweenDto) {
+    public List<DosageResponse> getDosagesBetweenDates(@Valid @RequestBody DatesBetweenDto datesBetweenDto) {
         return dosageService.getDosagesBetweenDates(datesBetweenDto);
     }
 
@@ -68,6 +66,20 @@ public class DosageController {
             @Parameter(description = "ID del usuario al que pertenecen las dosis a recuperar", required = true) @PathVariable Long userId) {
         List<Dosage> dosages = dosageService.getAllDosagesByUser(userId);
         return new ResponseEntity<>(dosages, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    @Operation(summary = "Actualizar dosis", description = "Actualizar datos de una dosis a partir de su ID único.", responses = {
+            @ApiResponse(responseCode = "200", description = "Dosis actualizada correctamente", content = @Content(schema = @Schema(implementation = User.class))),
+            @ApiResponse(responseCode = "400", description = "Datos recibidos no validos"),
+            @ApiResponse(responseCode = "404", description = "Dosis no encontrad"),
+            @ApiResponse(responseCode = "500", description = "Error interno de servidor")
+    })
+    public Dosage updateDosage(
+            @Valid @RequestBody DosageRequest dosageRequest) {
+        Dosage dosageToUpdate = dosageService.convertToDosageToUpdate(dosageRequest);
+
+        return dosageService.updateDosage(dosageToUpdate);
     }
 
 }

@@ -54,7 +54,7 @@ public class MeasurementController {
                         @ApiResponse(responseCode = "400", description = "Datos introducidos incorrectos"),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
         })
-        public void createMeasurement(
+        public Long createMeasurement(
                         @Parameter(description = "ID del usuario que crea la medición", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
                         @Valid @RequestBody MeasurementRequest measurementRequest) {
 
@@ -66,7 +66,7 @@ public class MeasurementController {
                 Integer daysToNextMeasurement = newMeasurement.getDosagesValuesList().length;
                 User measurementUser = measurement.getUser();
                 expectedMeasurementDateService.generateExpectedMeasurementDate(daysToNextMeasurement, measurementUser);
-
+                return newMeasurement.getId();
         }
 
         @GetMapping("/")

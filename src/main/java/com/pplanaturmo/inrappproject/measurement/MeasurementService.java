@@ -61,6 +61,7 @@ public class MeasurementService {
 
     public Measurement convertToMeasurement(Long userId, MeasurementRequest measurementRequest) {
 
+
         Measurement measurement = new Measurement();
         LocalDate now = LocalDate.now();
         User user = userRepository.findById(userId)
@@ -90,7 +91,8 @@ public class MeasurementService {
 
         if (needToDecreaseLevel(user, value)) {
             if (value > TOO_DANGEROUS_VALUE) {
-                throw new DangerousValueException("The value is too dangerous. Please consult a doctor.");
+                patternLevel = null;
+                //throw new DangerousValueException("The value is too dangerous. Please consult a doctor.");
             } else {
                 patternLevel--;
             }

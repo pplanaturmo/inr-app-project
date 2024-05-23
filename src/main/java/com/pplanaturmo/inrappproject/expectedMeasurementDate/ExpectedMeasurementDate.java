@@ -1,5 +1,6 @@
 package com.pplanaturmo.inrappproject.expectedMeasurementDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class ExpectedMeasurementDate {
   private Long id;
 
   @Schema(description = "ID del usuario al que pertenece la fecha prevista")
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
   private User user;

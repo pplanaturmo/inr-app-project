@@ -3,7 +3,11 @@ package com.pplanaturmo.inrappproject.dosage;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.pplanaturmo.inrappproject.dosage.dtos.DosageRequest;
+import com.pplanaturmo.inrappproject.dosage.dtos.DosageResponse;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +43,13 @@ public class DosageService {
         return dosageRepository.save(dosage);
     }
 
+    public Dosage convertToDosageToUpdate(DosageRequest dosageRequest) {
+        Dosage dosageToUpdate = dosageRepository.findById(dosageRequest.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + dosageRequest.getId()));
+                dosageToUpdate.setTaken(dosageRequest.getTaken());
+
+        return dosageToUpdate;
+    }
     public void deleteDosage(Long id) {
         dosageRepository.deleteById(id);
     }
@@ -61,7 +72,7 @@ public class DosageService {
                 .orElse(null);
     }
 
-    public List<Dosage> getDosagesBetweenDates(DatesBetweenDto datesBetweenDto) {
+    /*public List<Dosage> getDosagesBetweenDates(DatesBetweenDto datesBetweenDto) {
 
         Long userId = datesBetweenDto.getUserId();
         LocalDate startDate = dateManagement.convertToLocalDate(datesBetweenDto.getStartDate());
@@ -78,7 +89,20 @@ public class DosageService {
         }
 
         return dosages;
+    }*/
+    public List<DosageResponse> getDosagesBetweenDates(DatesBetweenDto datesBetweenDto) {
+        Long userId = datesBetweenDto.getUserId();
+        LocalDate startDate = dateManagement.convertToLocalDate(datesBetweenDto.getStartDate());
+        LocalDate endDate = dateManagement.convertToLocalDate(datesBetweenDto.getFinishDate());
+
+
+        List<Dosage>  dosages = dosageRepository.findByMeasurement_User_IdAndDoseDateBetween(userId, startDate, endDate);
+
+        return dosages.stream()
+                .map(dosage -> new DosageResponse(dosage.getId(),dosage.getDoseValue(), java.sql.Date.valueOf(dosage.getDoseDate()), dosage.getTaken()))
+                .collect(Collectors.toList());
     }
+
 
     public void createDosagesByMeasurement(Measurement measurement) {
 

@@ -1,5 +1,6 @@
 package com.pplanaturmo.inrappproject.measurement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class Measurement {
     private Long id;
 
     @Schema(description = "ID del usuario que realiza la medición")
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
