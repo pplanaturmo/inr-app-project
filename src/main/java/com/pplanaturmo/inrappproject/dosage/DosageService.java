@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.pplanaturmo.inrappproject.dosage.dtos.DosageRequest;
-import com.pplanaturmo.inrappproject.dosage.dtos.DosageResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pplanaturmo.inrappproject.aggregatedDtos.DatesBetweenDto;
+import com.pplanaturmo.inrappproject.dosage.dtos.DosageRequest;
+import com.pplanaturmo.inrappproject.dosage.dtos.DosageResponse;
 import com.pplanaturmo.inrappproject.measurement.Measurement;
 import com.pplanaturmo.inrappproject.measurement.MeasurementRepository;
 import com.pplanaturmo.inrappproject.utilities.DateManagement;
@@ -46,10 +46,11 @@ public class DosageService {
     public Dosage convertToDosageToUpdate(DosageRequest dosageRequest) {
         Dosage dosageToUpdate = dosageRepository.findById(dosageRequest.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + dosageRequest.getId()));
-                dosageToUpdate.setTaken(dosageRequest.getTaken());
+        dosageToUpdate.setTaken(dosageRequest.getTaken());
 
         return dosageToUpdate;
     }
+
     public void deleteDosage(Long id) {
         dosageRepository.deleteById(id);
     }
@@ -72,37 +73,41 @@ public class DosageService {
                 .orElse(null);
     }
 
-    /*public List<Dosage> getDosagesBetweenDates(DatesBetweenDto datesBetweenDto) {
-
-        Long userId = datesBetweenDto.getUserId();
-        LocalDate startDate = dateManagement.convertToLocalDate(datesBetweenDto.getStartDate());
-        LocalDate endDate = dateManagement.convertToLocalDate(datesBetweenDto.getFinishDate());
-
-        List<Measurement> measurements = measurementRepository.findByUserId(userId);
-
-        List<Dosage> dosages = new ArrayList<>();
-
-        for (Measurement measurement : measurements) {
-            List<Dosage> dosagesForMeasurement = dosageRepository.findByMeasurementAndDoseDateBetween(measurement,
-                    startDate, endDate);
-            dosages.addAll(dosagesForMeasurement);
-        }
-
-        return dosages;
-    }*/
+    /*
+     * public List<Dosage> getDosagesBetweenDates(DatesBetweenDto datesBetweenDto) {
+     * 
+     * Long userId = datesBetweenDto.getUserId();
+     * LocalDate startDate =
+     * dateManagement.convertToLocalDate(datesBetweenDto.getStartDate());
+     * LocalDate endDate =
+     * dateManagement.convertToLocalDate(datesBetweenDto.getFinishDate());
+     * 
+     * List<Measurement> measurements = measurementRepository.findByUserId(userId);
+     * 
+     * List<Dosage> dosages = new ArrayList<>();
+     * 
+     * for (Measurement measurement : measurements) {
+     * List<Dosage> dosagesForMeasurement =
+     * dosageRepository.findByMeasurementAndDoseDateBetween(measurement,
+     * startDate, endDate);
+     * dosages.addAll(dosagesForMeasurement);
+     * }
+     * 
+     * return dosages;
+     * }
+     */
     public List<DosageResponse> getDosagesBetweenDates(DatesBetweenDto datesBetweenDto) {
         Long userId = datesBetweenDto.getUserId();
         LocalDate startDate = dateManagement.convertToLocalDate(datesBetweenDto.getStartDate());
         LocalDate endDate = dateManagement.convertToLocalDate(datesBetweenDto.getFinishDate());
 
-
-        List<Dosage>  dosages = dosageRepository.findByMeasurement_User_IdAndDoseDateBetween(userId, startDate, endDate);
+        List<Dosage> dosages = dosageRepository.findByMeasurement_User_IdAndDoseDateBetween(userId, startDate, endDate);
 
         return dosages.stream()
-                .map(dosage -> new DosageResponse(dosage.getId(),dosage.getDoseValue(), java.sql.Date.valueOf(dosage.getDoseDate()), dosage.getTaken()))
+                .map(dosage -> new DosageResponse(dosage.getId(), dosage.getDoseValue(),
+                        java.sql.Date.valueOf(dosage.getDoseDate()), dosage.getTaken()))
                 .collect(Collectors.toList());
     }
-
 
     public void createDosagesByMeasurement(Measurement measurement) {
 
