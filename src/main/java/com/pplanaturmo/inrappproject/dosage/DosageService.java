@@ -96,6 +96,46 @@ public class DosageService {
      * return dosages;
      * }
      */
+
+    public void createDosagesByMeasurement(Measurement measurement) {
+
+        final Double SKIP_FIRST_DOSE = 5.0;
+        final Double NO_DOSAGES = 7.0;
+
+        Double[] dosagesList = measurement.getDosagesValuesList();
+        Double value = measurement.getValue();
+
+        LocalDate dosageDate = LocalDate.now();
+        if (dosagesStartNextDay(measurement, dosageDate)) {
+            dosageDate = dosageDate.plusDays(1);
+        }
+        DatesBetweenDto toDeleteDto = new DatesBetweenDto();
+        toDeleteDto.setUserId(measurement.getUser().getId());
+        toDeleteDto.setStartDate(dosageDate.toString());
+        toDeleteDto.setFinishDate(dosageDate.plusDays(7).toString());
+
+        List<DosageResponse> oldDosages = getDosagesBetweenDates(toDeleteDto);
+        deleteDosages(oldDosages);
+
+        if (value > NO_DOSAGES) {
+
+            return;
+        } else {
+
+            if (value >= SKIP_FIRST_DOSE) {
+                createDosagesHighValue(measurement, dosageDate, dosagesList);
+            } else {
+                createDosages(measurement, dosageDate, dosagesList);
+            }
+        }
+    }
+
+   private Boolean dosagesStartNextDay(Measurement measurement, LocalDate dosageDate) {
+       LocalDate measurementDate = measurement.getDate();
+       boolean doseExists = getDosageByDate(measurement.getUser().getId(), measurementDate) != null;
+
+       return doseExists ? getDosageByDate(measurement.getUser().getId(), measurementDate).getTaken() : false;
+   }
     public List<DosageResponse> getDosagesBetweenDates(DatesBetweenDto datesBetweenDto) {
         Long userId = datesBetweenDto.getUserId();
         LocalDate startDate = dateManagement.convertToLocalDate(datesBetweenDto.getStartDate());
@@ -109,35 +149,14 @@ public class DosageService {
                 .collect(Collectors.toList());
     }
 
-    public void createDosagesByMeasurement(Measurement measurement) {
-
-        final Double SKIP_FIRST_DOSE = 5.0;
-        final Double NO_DOSAGES = 7.0;
-
-        Double[] dosagesList = measurement.getDosagesValuesList();
-        Double value = measurement.getValue();
-
-        if (value > NO_DOSAGES) {
-            return;
-        } else {
-            LocalDate dosageDate = LocalDate.now();
-
-            if (dosagesStartNexDay(measurement, dosageDate)) {
-                dosageDate = dosageDate.plusDays(1);
-            }
-
-            if (value >= SKIP_FIRST_DOSE) {
-                createDosagesHighValue(measurement, dosageDate, dosagesList);
-            } else {
-                createDosages(measurement, dosageDate, dosagesList);
+    public void deleteDosages(List<DosageResponse> dosagesToDelete) {
+        for (DosageResponse dosageResponse : dosagesToDelete) {
+            Long dosageId = dosageResponse.getId();
+            Dosage dosage = dosageRepository.findById(dosageId).orElse(null);
+            if (dosage != null) {
+                dosageRepository.delete(dosage);
             }
         }
-    }
-
-    private Boolean dosagesStartNexDay(Measurement measurement, LocalDate dosageDate) {
-        boolean doseExists = getDosageByDate(measurement.getUser().getId(), measurement.getDate()) != null;
-
-        return doseExists ? getDosageByDate(measurement.getUser().getId(), measurement.getDate()).getTaken() : false;
     }
 
     private void createDosagesHighValue(Measurement measurement, LocalDate dosageDate, Double[] dosagesList) {

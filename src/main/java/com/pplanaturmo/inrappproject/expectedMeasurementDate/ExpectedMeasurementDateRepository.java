@@ -1,6 +1,7 @@
 package com.pplanaturmo.inrappproject.expectedMeasurementDate;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,5 +16,7 @@ public interface ExpectedMeasurementDateRepository extends JpaRepository<Expecte
 
     @Query("SELECT e FROM ExpectedMeasurementDate e WHERE e.expectedDate <> e.fullfilled_date")
     List<ExpectedMeasurementDate> findByMismatchedDates();
+
+    Optional<ExpectedMeasurementDate> findTopByUserIdOrderByExpectedDateDesc(Long userId);
 
 }

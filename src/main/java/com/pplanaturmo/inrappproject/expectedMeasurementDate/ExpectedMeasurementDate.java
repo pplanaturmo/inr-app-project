@@ -40,6 +40,9 @@ public class ExpectedMeasurementDate {
   @Temporal(TemporalType.DATE)
   private LocalDate expectedDate;
 
+  @Schema(description = "Valor booleano de aviso urgente contacto médico")
+  @Column(name = "contact", nullable = false)
+  private Boolean contactDoctorASAP;
   @Schema(description = "Fecha de realización de la medición")
   @Column(name = "fullfilled_date", nullable = true)
   @Temporal(TemporalType.DATE)

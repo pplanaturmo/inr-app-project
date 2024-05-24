@@ -65,7 +65,7 @@ public class MeasurementController {
                 dosageService.createDosagesByMeasurement(newMeasurement);
                 Integer daysToNextMeasurement = newMeasurement.getDosagesValuesList().length;
                 User measurementUser = measurement.getUser();
-                expectedMeasurementDateService.generateExpectedMeasurementDate(daysToNextMeasurement, measurementUser);
+                expectedMeasurementDateService.generateExpectedMeasurementDate(daysToNextMeasurement, measurementUser, measurement.getValue());
                 return newMeasurement.getId();
         }
 

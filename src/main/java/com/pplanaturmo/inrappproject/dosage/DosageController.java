@@ -1,5 +1,6 @@
 package com.pplanaturmo.inrappproject.dosage;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.pplanaturmo.inrappproject.dosage.dtos.DosageRequest;
@@ -82,4 +83,11 @@ public class DosageController {
         return dosageService.updateDosage(dosageToUpdate);
     }
 
+    @GetMapping("prueba")
+    public List<DosageResponse> prueba(){
+        DatesBetweenDto toDeleteDto = new DatesBetweenDto();
+        toDeleteDto.setUserId(1L);
+
+        return getDosagesBetweenDates(toDeleteDto);
+    }
 }

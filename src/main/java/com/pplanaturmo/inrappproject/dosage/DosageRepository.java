@@ -23,4 +23,5 @@ public interface DosageRepository extends JpaRepository<Dosage, Long> {
     Optional<Dosage> findByMeasurement_User_IdAndDoseDate(Long userId, LocalDate doseDate);
 
     List<Dosage> findByMeasurement_User_IdAndDoseDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
+
 }
