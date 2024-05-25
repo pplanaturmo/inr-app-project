@@ -10,7 +10,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 import com.pplanaturmo.inrappproject.observation.Observation.CauseEnum;
-import com.pplanaturmo.inrappproject.professional.dtos.ProfessionalRequest.TypeEnumValidator;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Constraint;
@@ -44,7 +43,7 @@ public class ObservationRequest {
     private String date;
 
     @Schema(description = "Motivo de la observación")
-    @NotNull(message = "Type is required")
+    @NotNull(message = "Cause is required")
     @CauseEnumConstraint(message = "Invalid type")
     private String cause;
 
@@ -55,7 +54,7 @@ public class ObservationRequest {
     @Target({ ElementType.FIELD })
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
-    @Constraint(validatedBy = TypeEnumValidator.class)
+    @Constraint(validatedBy = CauseEnumValidator.class)
     public @interface CauseEnumConstraint {
         String message() default "Invalid cause";
 
@@ -64,7 +63,7 @@ public class ObservationRequest {
         Class<? extends Payload>[] payload() default {};
     }
 
-    public class CauseEnumValidator implements ConstraintValidator<CauseEnumConstraint, String> {
+    public static class CauseEnumValidator implements ConstraintValidator<CauseEnumConstraint, String> {
 
         @Override
         public void initialize(CauseEnumConstraint constraintAnnotation) {

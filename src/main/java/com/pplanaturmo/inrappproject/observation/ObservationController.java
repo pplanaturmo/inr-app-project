@@ -34,7 +34,8 @@ public class ObservationController {
         @Autowired
         private ObservationService observationService;
 
-        @PostMapping("/create/{userId}")
+        // @PostMapping("/create/{userId}")
+        @PostMapping("/create/")
         @Operation(summary = "Crear una observación", description = "Crear una nueva observación para un usuario específico", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos de la observación a crear", required = true, content = @Content(schema = @Schema(implementation = ObservationRequest.class))), responses = {
                         @ApiResponse(responseCode = "200", description = "Observacin ´creada con éxito", content = @Content(schema = @Schema(implementation = Observation.class))),
                         @ApiResponse(responseCode = "400", description = "Datos recibidos no válidos"),
@@ -42,10 +43,11 @@ public class ObservationController {
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
         })
         public Observation createObservation(
-                        @Parameter(description = "ID del usuario", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
+                        // @Parameter(description = "ID del usuario", required = true)
+                        // @PathVariable("userId") @Valid @NotNull Long userId,
                         @Valid @RequestBody ObservationRequest observationRequest) {
 
-                Observation newObservation = observationService.convertToObservation(userId, observationRequest);
+                Observation newObservation = observationService.convertToObservation(observationRequest);
                 return observationService.createObservation(newObservation);
         }
 

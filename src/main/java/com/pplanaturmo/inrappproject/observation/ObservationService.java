@@ -38,8 +38,8 @@ public class ObservationService {
         return observationRepository.save(observation);
     }
 
-    public Observation convertToObservation(Long userId, ObservationRequest observationRequest) {
-
+    public Observation convertToObservation(ObservationRequest observationRequest) {
+        Long userId = observationRequest.getUserId();
         Observation newObservation = new Observation();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
