@@ -1,7 +1,5 @@
 package com.pplanaturmo.inrappproject.data.initialUsers;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -10,7 +8,7 @@ import com.pplanaturmo.inrappproject.dosePattern.DosePattern;
 import com.pplanaturmo.inrappproject.dosePattern.DosePatternRepository;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInr;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInrRepository;
-import com.pplanaturmo.inrappproject.role.Role;
+
 import com.pplanaturmo.inrappproject.role.RoleService;
 import com.pplanaturmo.inrappproject.user.User;
 import com.pplanaturmo.inrappproject.user.UserRepository;
@@ -29,9 +27,6 @@ public class UserDataLoader {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private RoleService roleService;
 
     public void loadUser() throws Exception {
 
@@ -60,7 +55,7 @@ public class UserDataLoader {
         user2.setSurname("Professional Surname");
         user2.setEmail("professional@example.com");
         user2.setDataConsent(true);
-        user2.setPassword(passwordEncoder.encode("12341234")); // Encoded password
+        user2.setPassword(passwordEncoder.encode("12341234"));
         user2.setUserRole("PROFESSIONAL");
         RangeInr rangeInr2 = rangeInrRepository.getReferenceById(1L);
         DosePattern dosePattern2 = dosePatternRepository.getReferenceById(13L);
@@ -73,7 +68,7 @@ public class UserDataLoader {
         user3.setSurname("Manager Surname");
         user3.setEmail("manager@example.com");
         user3.setDataConsent(true);
-        user3.setPassword(passwordEncoder.encode("12341234")); // Encoded password
+        user3.setPassword(passwordEncoder.encode("12341234"));
         user3.setUserRole("MANAGER");
         RangeInr rangeInr3 = rangeInrRepository.getReferenceById(1L);
         DosePattern dosePattern3 = dosePatternRepository.getReferenceById(13L);

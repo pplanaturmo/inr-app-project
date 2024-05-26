@@ -47,6 +47,10 @@ public class Alert {
     @Column(name = "type", nullable = false)
     private LevelEnum level;
 
+    @Schema(description = "Booleano de si se ha revisado la alerta dosis")
+    @Column(name = "revised", nullable = false)
+    private Boolean revised;
+
     @Schema(description = "Marca de tiempo de creación")
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

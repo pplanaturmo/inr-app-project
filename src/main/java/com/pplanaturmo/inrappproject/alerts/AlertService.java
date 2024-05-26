@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pplanaturmo.inrappproject.alerts.Alert.LevelEnum;
+import com.pplanaturmo.inrappproject.alerts.dtos.AlertResponse;
 import com.pplanaturmo.inrappproject.measurement.Measurement;
 import com.pplanaturmo.inrappproject.measurement.MeasurementService;
 import com.pplanaturmo.inrappproject.user.User;
@@ -56,6 +57,10 @@ public class AlertService {
         return alertRepository.save(alert);
     }
 
+    public List<Alert> getAllAlerts() {
+        return alertRepository.findAll();
+    }
+
     public Alert getAlertById(Long id) {
         return alertRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Alert not found with id: " + id));
@@ -91,4 +96,29 @@ public class AlertService {
         alertRepository.deleteById(id);
     }
 
+    public AlertResponse convertToResponse(Alert alert) {
+        AlertResponse alertResponse = AlertResponse.builder().id(alert.getId())
+                .userId(alert.getMeasurement().getUser().getId())
+                .userName(alert.getMeasurement().getUser().getName())
+                .userSurname(alert.getMeasurement().getUser().getSurname())
+                .userEmail(alert.getMeasurement().getUser().getEmail())
+                .date(alert.getCreatedAt())
+                .level(alert.getLevel())
+                .build();
+
+        return alertResponse;
+    }
+
+    public List<AlertResponse> convertToAlertResponseList(List<Alert> alerts) {
+        return alerts.stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<AlertResponse> convertToPendingList(List<Alert> alerts) {
+        return alerts.stream()
+                .filter(alert -> !alert.getRevised())
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
+    }
 }
