@@ -43,8 +43,8 @@ public class InitialDataLoader {
   }
 
   public void loadInrRanges() {
-    RangeInr regular = new RangeInr(1L, 2.0, 3.0, "Regular interval");
-    RangeInr mechanicalValves = new RangeInr(2L, 2.5, 3.5, "Interval for people with mechanical valves");
+    RangeInr regular = new RangeInr(1L, 2.0, 3.0, "Intervalo estándar");
+    RangeInr mechanicalValves = new RangeInr(2L, 2.5, 3.5, "Intervalo para personas con válvulas mecánicas");
 
     rangeInrRepository.saveAll(Arrays.asList(regular, mechanicalValves));
   }

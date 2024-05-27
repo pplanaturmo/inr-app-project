@@ -65,22 +65,9 @@ public class User implements UserDetails {
     @Column(name = "surname", nullable = false)
     private String surname;
 
-    // @Schema(description = "Documento nacional de identidad o equivalente del
-    // usuario")
-    // @Column(name = "id_card", nullable = false)
-    // private String idCard;
-
-    // @Schema(description = "Tarjeta sanitaria del usuario")
-    // @Column(name = "health_card", nullable = false)
-    // private String healthCard;
-
     @Schema(description = "Correo eléctronico del usuario")
     @Column(name = "email", nullable = false)
     private String email;
-
-    // @Schema(description = "Teléfono de contacto del usuario")
-    // @Column(name = "phone", nullable = false)
-    // private Long phone;
 
     @Schema(description = "Consentimiento de tratamiento estadístico de datos del usuario")
     @Column(name = "data_consent", nullable = false)

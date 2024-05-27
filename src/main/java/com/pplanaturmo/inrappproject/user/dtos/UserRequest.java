@@ -32,25 +32,19 @@ public class UserRequest {
     @NotBlank(message = "Surname/s is required")
     private String surname;
 
-    @Schema(description = "Documento nacional de identidad o equivalente de usuario recibido")
-    @NotNull(message = "Id card field is required")
-    @NotBlank(message = "Id card field is required")
-    private String idCard;
-
-    @Schema(description = "Tarjeta sanitaria de usuario recibido")
-    @NotNull(message = "Health card is required")
-    @NotBlank(message = "Health card is required")
-    private String healthCard;
-
     @Schema(description = "Correo electrónico del usuario recibido")
     @NotNull(message = "Email is required")
     @Email(message = "A valid email is required")
     private String email;
 
-    @Schema(description = "Telefono de contacto del usuario recibido")
+    @Schema(description = "Id el rango INR  del usuario recibido")
     @NumberFormat
     @NotNull
-    private Long phone;
+    private Long rangeInr;
+    @Schema(description = "Id del patrón de dosificación del usuario recibido")
+    @NumberFormat
+    @NotNull
+    private Long dosePattern;
 
     @Schema(description = "Consentimiento de tratamiento de datos del usuario recibido")
     @NotNull

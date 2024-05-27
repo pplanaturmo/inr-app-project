@@ -68,12 +68,13 @@ public class AuthenticationService {
 
         user.setUserRole("PATIENT");
 
-        // Optional<Role> patientRole = roleService.findRoleByString("PATIENT");
-        // if (patientRole.isPresent()) {
-        // user.setUserRole(patientRole.get());
-        // }
+
+
 
         var savedUser = userRepository.save(user);
+
+        userService.assignInrToUser(savedUser.getId(),userRequest.getRangeInr());
+        userService.assignDosePatternToUser(savedUser.getId(),userRequest.getDosePattern());
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);

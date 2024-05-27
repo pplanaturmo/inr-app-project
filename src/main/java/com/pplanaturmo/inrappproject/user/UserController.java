@@ -49,11 +49,13 @@ public class UserController {
         public User createUser(
                         @Parameter(description = "Objeto para validar datos de creación de usuario", required = true) @Valid @RequestBody UserRequest createUserRequest) {
                 User user = userService.convertToUser(createUserRequest);
-
-                return userService.createUser(user);
+                User newUser = userService.createUser(user);
+                userService.assignInrToUser(newUser.getId(),createUserRequest.getRangeInr());
+                userService.assignDosePatternToUser(newUser.getId(),createUserRequest.getDosePattern());
+                return newUser;
         }
 
-        @GetMapping("/")
+        @GetMapping("/all")
         @Operation(summary = "Obtener listado de usuarios", description = "Este enpoint permite la obtención de un listado de usuarios", responses = {
                         @ApiResponse(responseCode = "200", description = "Listado de usuarios", content = @Content(schema = @Schema(implementation = User.class))),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
@@ -142,7 +144,7 @@ public class UserController {
                         @Parameter(description = "ID del usuario al que se le asigna un patrón de dosificación", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
                         @RequestBody @Valid UpdateUserPattern updateUserPattern) {
                 Long patternId = updateUserPattern.getPatternId();
-                userService.assignDosePastternToUser(userId, patternId);
+                userService.assignDosePatternToUser(userId, patternId);
         }
 
         @PutMapping("/{userId}/role")

@@ -3,6 +3,7 @@ package com.pplanaturmo.inrappproject.user;
 import java.util.List;
 import java.util.Optional;
 
+import com.pplanaturmo.inrappproject.dosePattern.DosePatternController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,7 @@ public class UserService {
     public User createUser(User user) {
         validateUniqueEmail(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return userRepository.save(user);
     }
 
@@ -118,13 +120,22 @@ public class UserService {
 
         user.setName(createUserRequest.getName());
         user.setSurname(createUserRequest.getSurname());
-        // user.setIdCard(createUserRequest.getIdCard());
-        // user.setHealthCard(createUserRequest.getHealthCard());
         user.setEmail(createUserRequest.getEmail());
-        // user.setPhone(createUserRequest.getPhone());
         boolean incomingDataConsent = Boolean.parseBoolean(createUserRequest.getDataConsent());
-
         user.setDataConsent(incomingDataConsent);
+
+
+        /*
+        RangeInr rangeInr = rangeInrRepository.findById(createUserRequest.getRangeInrId())
+                .orElseThrow(() -> new EntityNotFoundException("RangeInr not found with id: " + createUserRequest.getRangeInrId()));
+
+        user.setRangeInr(rangeInr);
+
+        DosePattern dosePattern = dosePatternRepository.findById(createUserRequest.getDosePatternId())
+                .orElseThrow(() -> new EntityNotFoundException("DosePattern not found with id: "+ createUserRequest.getDosePatternId()) );
+
+        user.setDosePattern(dosePattern);*/
+
         user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
         return user;
     }
@@ -213,7 +224,7 @@ public class UserService {
 
     }
 
-    public User assignDosePastternToUser(@Valid @NotNull Long userId, Long patternId) {
+    public User assignDosePatternToUser(@Valid @NotNull Long userId, Long patternId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
         DosePattern pattern = dosePatternRepository.getReferenceById(patternId);

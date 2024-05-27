@@ -42,6 +42,7 @@ public class AuthenticationController {
     })
     public ResponseEntity<AuthenticatedUserResponse> register(
             @Parameter(description = "Detalles del usuario para el registro", required = true) @RequestBody UserRequest userRequest) {
+
         return ResponseEntity.ok(authenticationService.register(userRequest));
     }
 
