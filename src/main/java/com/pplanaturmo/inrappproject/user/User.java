@@ -25,7 +25,6 @@ import com.pplanaturmo.inrappproject.measurement.Measurement;
 import com.pplanaturmo.inrappproject.observation.Observation;
 import com.pplanaturmo.inrappproject.professional.Professional;
 import com.pplanaturmo.inrappproject.rangeInr.RangeInr;
-import com.pplanaturmo.inrappproject.role.Role;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

@@ -124,17 +124,22 @@ public class UserService {
         boolean incomingDataConsent = Boolean.parseBoolean(createUserRequest.getDataConsent());
         user.setDataConsent(incomingDataConsent);
 
-
         /*
-        RangeInr rangeInr = rangeInrRepository.findById(createUserRequest.getRangeInrId())
-                .orElseThrow(() -> new EntityNotFoundException("RangeInr not found with id: " + createUserRequest.getRangeInrId()));
-
-        user.setRangeInr(rangeInr);
-
-        DosePattern dosePattern = dosePatternRepository.findById(createUserRequest.getDosePatternId())
-                .orElseThrow(() -> new EntityNotFoundException("DosePattern not found with id: "+ createUserRequest.getDosePatternId()) );
-
-        user.setDosePattern(dosePattern);*/
+         * RangeInr rangeInr =
+         * rangeInrRepository.findById(createUserRequest.getRangeInrId())
+         * .orElseThrow(() -> new EntityNotFoundException("RangeInr not found with id: "
+         * + createUserRequest.getRangeInrId()));
+         * 
+         * user.setRangeInr(rangeInr);
+         * 
+         * DosePattern dosePattern =
+         * dosePatternRepository.findById(createUserRequest.getDosePatternId())
+         * .orElseThrow(() -> new
+         * EntityNotFoundException("DosePattern not found with id: "+
+         * createUserRequest.getDosePatternId()) );
+         * 
+         * user.setDosePattern(dosePattern);
+         */
 
         user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
         return user;
