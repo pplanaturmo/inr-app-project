@@ -48,7 +48,7 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     @Operation(summary = "Autenticar usuario", description = "Authenticate a user by providing the necessary credentials.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Credentials for authentication", required = true, content = @Content(schema = @Schema(implementation = AuthenticationRequest.class))), responses = {
-            @ApiResponse(responseCode = "200", description = "Usuario autenticado correctamente", content = @Content(schema = @Schema(implementation = AuthenticatedUserResponse.class))),
+            @ApiResponse(responseCode = "200", description = "Usuario autentificado correctamente", content = @Content(schema = @Schema(implementation = AuthenticatedUserResponse.class))),
             @ApiResponse(responseCode = "401", description = "Credenciales no validas"),
             @ApiResponse(responseCode = "500", description = "Error interno de servidor")
     })

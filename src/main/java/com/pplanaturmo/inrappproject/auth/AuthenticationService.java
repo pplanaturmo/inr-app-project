@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -92,7 +93,7 @@ public class AuthenticationService {
                 .role(user.getUserRole())
                 .build();
     }
-
+/*
     public AuthenticatedUserResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -104,6 +105,40 @@ public class AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
+        return AuthenticatedUserResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .department(user.getDepartment() != null ? user.getDepartment().getId() : null)
+                .supervisor(user.getSupervisor() != null ? user.getSupervisor().getId() : null)
+                .rangeInr(user.getRangeInr() != null ? user.getRangeInr().getId() : null)
+                .dosePattern(user.getDosePattern() != null ? user.getDosePattern().getId() : null)
+                .role(user.getUserRole())
+                .build();
+    }*/
+
+    public AuthenticatedUserResponse authenticate(AuthenticationRequest authenticationRequest) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getEmail(),
+                            authenticationRequest.getPassword()));
+        } catch (Exception e) {
+            System.out.println("Authentication failed: " + e.getMessage());
+            throw e; // You might want to handle this differently
+        }
+
+        var user = userRepository.findByEmail(authenticationRequest.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+
         return AuthenticatedUserResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
