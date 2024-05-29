@@ -47,7 +47,7 @@ public class DepartmentController {
         private UserService userService;
 
         @PostMapping("/create")
-        @Operation(summary = "Crear nuevo departamento", description = "Crear nuevo departamento proporcionando los datos necesarios.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos del departamento a crear", required = true, content = @Content(schema = @Schema(implementation = MeasurementRequest.class))), responses = {
+        @Operation(summary = "Crear nuevo departamento", description = "Crear nuevo departamento proporcionando los datos necesarios.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos del departamento a crear", required = true, content = @Content(schema = @Schema(implementation = DepartmentRequest.class))), responses = {
                         @ApiResponse(responseCode = "200", description = "Departmento creado con éxito", content = @Content(schema = @Schema(implementation = Department.class))),
                         @ApiResponse(responseCode = "400", description = "Datos recibidos no validos"),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
@@ -70,20 +70,20 @@ public class DepartmentController {
         }
 
         @PutMapping("/{departmentId}/manager")
-        @Operation(summary = "Asignar coordinador al departamnento", description = "Asignar coordinador al departamento proporcionando los datos necesarios.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos del departamento a actualizar", required = true, content = @Content(schema = @Schema(implementation = MeasurementRequest.class))), responses = {
+        @Operation(summary = "Asignar coordinador al departamnento", description = "Asignar coordinador al departamento proporcionando los datos necesarios.", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos del departamento a actualizar", required = true, content = @Content(schema = @Schema(implementation = UpdateDepartmentManager.class))), responses = {
                         @ApiResponse(responseCode = "200", description = "Manager assigned successfully", content = @Content(schema = @Schema(implementation = Department.class))),
                         @ApiResponse(responseCode = "404", description = "Departmento no encontrado"),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
         })
         public Department assignManagerToDepartment(
-                        @Parameter(description = "ID del departmento", required = true) @PathVariable("departmentId") @Valid @NotNull Long departmentId,
-                        @RequestBody @Valid UpdateDepartmentManager updateDepartmentManager) {
+                        @Parameter(description = "ID del departamento", required = true) @PathVariable("departmentId") @Valid @NotNull Long departmentId,
+                        @Parameter(description = "Objeto para validar datos de actualización de departamento", required = true)@RequestBody @Valid UpdateDepartmentManager updateDepartmentManager) {
                 Long profesionalId = updateDepartmentManager.getManagerId();
                 return departmentService.assignManagerToDepartment(departmentId, profesionalId);
         }
 
         @PutMapping("/{departmentId}")
-        @Operation(summary = "Actualizar un departamento", description = "Actualizar un departamento proporcionando el ID y los datos", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos del departamento a actualizar", required = true, content = @Content(schema = @Schema(implementation = MeasurementRequest.class))), responses = {
+        @Operation(summary = "Actualizar un departamento", description = "Actualizar un departamento proporcionando el ID y los datos", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos del departamento a actualizar", required = true, content = @Content(schema = @Schema(implementation = DepartmentRequest.class))), responses = {
                         @ApiResponse(responseCode = "200", description = "Departamento actualizado con exito"),
                         @ApiResponse(responseCode = "404", description = "Departamento no encontrado"),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
