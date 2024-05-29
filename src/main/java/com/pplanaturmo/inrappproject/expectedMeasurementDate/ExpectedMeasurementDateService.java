@@ -17,7 +17,7 @@ public class ExpectedMeasurementDateService {
     @Autowired
     private ExpectedMeasurementDateRepository expectedMeasurementDateRepository;
 
-    public void generateExpectedMeasurementDate(Integer days, User user, double value) {
+    public void generateExpectedMeasurementDate(Integer days, User user, Double value) {
         final Double TOO_DANGEROUS_VALUE = 7.0;
 
         ExpectedMeasurementDate newExpectedMeasurementDate = new ExpectedMeasurementDate();
