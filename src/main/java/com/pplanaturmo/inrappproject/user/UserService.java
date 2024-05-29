@@ -72,7 +72,7 @@ public class UserService {
 
     public void validateUniqueEmail(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new AlreadyExistsException("Email already exists: " + user.getEmail());
+            throw new AlreadyExistsException("El correo electrónico ya está en uso: " + user.getEmail());
         }
     }
 

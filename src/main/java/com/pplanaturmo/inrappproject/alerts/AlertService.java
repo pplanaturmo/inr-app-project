@@ -40,6 +40,7 @@ public class AlertService {
         if (value < VERY_LOW_VALUE || value > HIGH_VALUE) {
             Alert newAlert = new Alert();
             newAlert.setMeasurement(measurement);
+            newAlert.setRevised(false);
             if (value < VERY_LOW_VALUE) {
                 newAlert.setLevel(LevelEnum.TOO_LOW);
             } else if (value < VERY_HIGH_VALUE) {
