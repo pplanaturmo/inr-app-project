@@ -158,6 +158,7 @@ public class MeasurementService {
     }
 
     private Double[] calculateValuesForChangingLevel(Integer numberOfDosages, Double[] pattern) {
+
         Double[] values = new Double[numberOfDosages];
         for (int i = 0; i < numberOfDosages; i++) {
 
@@ -167,12 +168,12 @@ public class MeasurementService {
         return values;
     }
 
-    private Double[] continuePreviousPattern(Integer numberOfDosages, Double[] previuosPattern) {
+    private Double[] continuePreviousPattern(Integer numberOfDosages, Double[] previousPattern) {
         Double[] values = new Double[numberOfDosages];
 
         for (int i = 0; i < values.length; i++) {
-            int index = (i + 1) % previuosPattern.length;
-            values[i] = previuosPattern[index];
+            int index = (i + 1) % previousPattern.length;
+            values[i] = previousPattern[index];
         }
         return values;
     }

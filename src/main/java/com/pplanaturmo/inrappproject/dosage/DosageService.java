@@ -106,9 +106,14 @@ public class DosageService {
         Double value = measurement.getValue();
 
         LocalDate dosageDate = LocalDate.now();
+
+        // If the patient has already taken a dose today and the pattern has to start the next day
+
         if (dosagesStartNextDay(measurement, dosageDate)) {
             dosageDate = dosageDate.plusDays(1);
         }
+
+        //remove previous doses, now that we have a fresh measurement
         DatesBetweenDto toDeleteDto = new DatesBetweenDto();
         toDeleteDto.setUserId(measurement.getUser().getId());
         toDeleteDto.setStartDate(dosageDate.toString());
