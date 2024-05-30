@@ -2,6 +2,7 @@ package com.pplanaturmo.inrappproject.observation;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +27,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 @RestController
+@Tag(name = "Controlador de Observaciones", description = "Operaciones relacionadas con manejo de observaciones")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
                 RequestMethod.DELETE })
 @RequestMapping("/api/observation")
@@ -34,7 +36,7 @@ public class ObservationController {
         @Autowired
         private ObservationService observationService;
 
-        // @PostMapping("/create/{userId}")
+
         @PostMapping("/create/")
         @Operation(summary = "Crear una observación", description = "Crear una nueva observación para un usuario específico", requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos de la observación a crear", required = true, content = @Content(schema = @Schema(implementation = ObservationRequest.class))), responses = {
                         @ApiResponse(responseCode = "200", description = "Observacin ´creada con éxito", content = @Content(schema = @Schema(implementation = Observation.class))),

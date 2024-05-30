@@ -27,7 +27,7 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
         RequestMethod.DELETE })
 @RequestMapping("/api/dosage")
-@Tag(name = "Control de dosis", description = "Operaciones relacionadas con el manejo de dosis")
+@Tag(name = "Controlador de Dosis", description = "Operaciones relacionadas con el manejo de dosis")
 public class DosageController {
 
     @Autowired
@@ -77,17 +77,11 @@ public class DosageController {
             @ApiResponse(responseCode = "500", description = "Error interno de servidor")
     })
     public Dosage updateDosage(
-            @Valid @RequestBody DosageRequest dosageRequest) {
+            @Parameter(description = "Objeto para validar datos de actualización de dosis", required = true) @Valid @RequestBody DosageRequest dosageRequest) {
         Dosage dosageToUpdate = dosageService.convertToDosageToUpdate(dosageRequest);
 
         return dosageService.updateDosage(dosageToUpdate);
     }
 
-    @GetMapping("prueba")
-    public List<DosageResponse> prueba(){
-        DatesBetweenDto toDeleteDto = new DatesBetweenDto();
-        toDeleteDto.setUserId(1L);
 
-        return getDosagesBetweenDates(toDeleteDto);
-    }
 }

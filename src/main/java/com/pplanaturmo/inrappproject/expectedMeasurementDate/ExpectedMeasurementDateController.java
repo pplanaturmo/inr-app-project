@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@Tag(name = "Fechas Previstas de Medición", description = "Operaciones relacionadas con manejo de fechas previstas de medición")
+@Tag(name = "Controlador de Fechas Previstas de Medición", description = "Operaciones relacionadas con manejo de fechas previstas de medición")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 @RequestMapping("/api/expected-measurement-dates")
 public class ExpectedMeasurementDateController {

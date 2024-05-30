@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
                 RequestMethod.DELETE })
 @RequestMapping("/api/department")
-@Tag(name = "Control de departamento", description = "Operaciones relacionadas con el manejo de departamento")
+@Tag(name = "Controlador de Departamentos", description = "Operaciones relacionadas con el manejo de departamento")
 public class DepartmentController {
 
         @Autowired

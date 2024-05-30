@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Tag(name = "Control de Rangos INR", description = "Operaciones relacionadas con el control de Rangos INR ")
+@Tag(name = "Controlador  de Rangos INR", description = "Operaciones relacionadas con el control de Rangos INR ")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 @RequestMapping("/api/range-inr")
 public class RangeInrController {

@@ -31,7 +31,7 @@ import jakarta.validation.constraints.NotNull;
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
         RequestMethod.DELETE })
 @RequestMapping("/api/professionals")
-@Tag(name = "Manejo de la entidad Profesional", description = "Operaciones relacinadas con profesionales")
+@Tag(name = "Controlador de Profesionales", description = "Operaciones relacinadas con profesionales")
 public class ProfessionalController {
 
     @Autowired

@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
         RequestMethod.DELETE })
 @RequestMapping("/api/roles")
-@Tag(name = "Manejo de roles", description = "Operaciones relacionadas con el manejo de roles")
+@Tag(name = "Controlador  de Roles", description = "Operaciones relacionadas con el manejo de roles")
 public class RoleController {
 
     @Autowired

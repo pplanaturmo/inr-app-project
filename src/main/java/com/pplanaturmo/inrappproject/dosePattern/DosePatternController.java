@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Tag(name = "Control de Patrones de Dosificación", description = "Operaciones relacionadas con el control de Patrones de Dosificación ")
+@Tag(name = "Controlador de Patrones de Dosificación", description = "Operaciones relacionadas con el control de Patrones de Dosificación ")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 @RequestMapping("/api/dose-pattern")
 public class DosePatternController {

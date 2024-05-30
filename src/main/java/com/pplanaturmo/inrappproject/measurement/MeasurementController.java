@@ -33,7 +33,7 @@ import jakarta.validation.constraints.NotNull;
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
                 RequestMethod.DELETE })
 @RequestMapping("/api/measurement")
-@Tag(name = "Control de Medidas", description = "Operaciones relacionadas con el control de medidas")
+@Tag(name = "Controlador  de Medidas", description = "Operaciones relacionadas con el control de medidas")
 public class MeasurementController {
 
         @Autowired

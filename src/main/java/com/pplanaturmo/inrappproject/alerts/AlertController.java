@@ -3,14 +3,12 @@ package com.pplanaturmo.inrappproject.alerts;
 
 import java.util.List;
 
+import com.pplanaturmo.inrappproject.alerts.dtos.AlertRequest;
+import com.pplanaturmo.inrappproject.dosage.Dosage;
+import com.pplanaturmo.inrappproject.dosage.dtos.DosageRequest;
+import com.pplanaturmo.inrappproject.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import com.pplanaturmo.inrappproject.alerts.dtos.AlertResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,9 +20,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@Tag(name = "Control de Alertas", description = "Operaciones relacionadas con manejo de alertas")
+@Tag(name = "Controlador de Alertas", description = "Operaciones relacionadas con manejo de alertas")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
                 RequestMethod.DELETE })
 @RequestMapping("/api/alerts")
@@ -90,14 +89,28 @@ public class AlertController {
                 return alertService.convertToAlertResponseList(alerts);
         }
 
+        @PutMapping("/revised")
+        @Operation(summary = "Actualizar alerta", description = "Actualizar datos de una alerta a partir de su ID único.", responses = {
+                @ApiResponse(responseCode = "200", description = "Alerta actualizada correctamente", content = @Content(schema = @Schema(implementation = User.class))),
+                @ApiResponse(responseCode = "400", description = "Datos recibidos no validos"),
+                @ApiResponse(responseCode = "404", description = "Alerta no encontrada"),
+                @ApiResponse(responseCode = "500", description = "Error interno de servidor")
+        })
+        public Alert updateDosage(
+                @Parameter(description = "Objeto para validar datos de actualización de alerta", required = true) @Valid @RequestBody AlertRequest alertRequest) {
+                Alert alertToUpdate = alertService.convertToAlertToUpdate(alertRequest);
+
+                return alertService.updateAlert(alertToUpdate);
+        }
+
+
         @DeleteMapping("/{alertId}")
         @Operation(summary = "Eliminar alerta", description = "Eliminar una alerta por su identificador único", responses = {
                         @ApiResponse(responseCode = "200", description = "Alerta eliminada correctamente"),
                         @ApiResponse(responseCode = "404", description = "Alerta no encontrada"),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
         })
-        public void deleteAlert(
-                        @Parameter(description = "ID de la alerta a eliminar", required = true) @PathVariable("alertId") @Valid @NotNull Long alertId) {
+        public void deleteAlert(@Parameter(description = "ID de la alerta a eliminar", required = true) @PathVariable("alertId") @Valid @NotNull Long alertId) {
                 alertService.deleteAlertById(alertId);
         }
 }

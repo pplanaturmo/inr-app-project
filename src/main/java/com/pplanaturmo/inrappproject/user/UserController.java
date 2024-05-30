@@ -31,7 +31,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 @RestController
-@Tag(name = "Control de Usuario", description = "Operaciones relacionadas con manejo de usuarios")
+@Tag(name = "Controlador de Usuarios", description = "Operaciones relacionadas con manejo de usuarios")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
                 RequestMethod.DELETE })
 @RequestMapping("/api/user")
@@ -84,7 +84,7 @@ public class UserController {
         })
         public User updateUser(
                         @Parameter(description = "ID del usuario a actualizar", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
-                        @Valid @RequestBody UserRequest createUserRequest) {
+                        @Parameter(description = "Objeto para validar datos de actualización de usuario", required = true) @Valid @RequestBody UserRequest createUserRequest) {
 
                 User user = userService.convertToUser(createUserRequest);
                 user.setId(userId);
@@ -100,7 +100,7 @@ public class UserController {
         })
         public User assignDepartmentToUser(
                         @Parameter(description = "ID del usuario que se asigna a un servicio o departamento", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
-                        @RequestBody @Valid UpdateUserDepartment updateUserDepartment) {
+                        @Parameter(description = "Objeto para validar datos de actualización de departamento de un usuario", required = true) @RequestBody @Valid UpdateUserDepartment updateUserDepartment) {
                 Long departmentId = updateUserDepartment.getDepartmentId();
                 return userService.assignDepartmentToUser(userId, departmentId);
         }
@@ -114,7 +114,7 @@ public class UserController {
         })
         public User assignSupervisorToUser(
                         @Parameter(description = "ID del usuario al que se le asigna un supervisor", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
-                        @RequestBody @Valid UpdateUserSupervisor updateUserSupervisor) {
+                        @Parameter(description = "Objeto para validar datos de actualización de supervisor de usuario", required = true) @RequestBody @Valid UpdateUserSupervisor updateUserSupervisor) {
                 Long professionalId = updateUserSupervisor.getProfessionalId();
                 return userService.assignSupervisorToUser(userId, professionalId);
         }
@@ -128,7 +128,7 @@ public class UserController {
         })
         public void setInrRange(
                         @Parameter(description = "ID del usuario al que se le asigna un rango terapéutico", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
-                        @RequestBody @Valid UpdateUserInrRange updateUserInrRange) {
+                        @Parameter(description = "Objeto para validar datos de actualización de rango INR de usuario", required = true) @RequestBody @Valid UpdateUserInrRange updateUserInrRange) {
                 Long rangeId = updateUserInrRange.getRangeId();
                 userService.assignInrToUser(userId, rangeId);
         }
@@ -142,7 +142,7 @@ public class UserController {
         })
         public void setDosePattern(
                         @Parameter(description = "ID del usuario al que se le asigna un patrón de dosificación", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
-                        @RequestBody @Valid UpdateUserPattern updateUserPattern) {
+                        @Parameter(description = "Objeto para validar datos de actualización de patrón de dosificación de usuario", required = true) @RequestBody @Valid UpdateUserPattern updateUserPattern) {
                 Long patternId = updateUserPattern.getPatternId();
                 userService.assignDosePatternToUser(userId, patternId);
         }
@@ -156,7 +156,7 @@ public class UserController {
         })
         public void setRole(
                         @Parameter(description = "ID del usuario al que se le asigna un rol", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
-                        @RequestBody @Valid UpdateUserRole updateUserRole) {
+                        @Parameter(description = "Objeto para validar datos de actualización de rol de usuario", required = true) @RequestBody @Valid UpdateUserRole updateUserRole) {
                 // String roleName = updateUserRole.getAssignedRole();
                 userService.assignRoleToUser(userId, updateUserRole.getAssignedRole());
         }

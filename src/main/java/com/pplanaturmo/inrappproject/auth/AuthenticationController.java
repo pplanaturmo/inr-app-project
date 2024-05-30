@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
         RequestMethod.DELETE })
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication", description = "Operaciones relacionadas con la autenticación de usuarios")
+@Tag(name = "Controlador de Autenticación", description = "Operaciones relacionadas con la autenticación de usuarios")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

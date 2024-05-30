@@ -3,6 +3,9 @@ package com.pplanaturmo.inrappproject.alerts;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.pplanaturmo.inrappproject.alerts.dtos.AlertRequest;
+import com.pplanaturmo.inrappproject.dosage.Dosage;
+import com.pplanaturmo.inrappproject.dosage.dtos.DosageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +61,13 @@ public class AlertService {
         return alertRepository.save(alert);
     }
 
+    public Alert convertToAlertToUpdate(AlertRequest alertRequest) {
+        Alert alertToUpdate = alertRepository.findById(alertRequest.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Alert not found with id: " + alertRequest.getId()));
+        alertToUpdate.setRevised(alertRequest.getRevised());
+
+        return alertToUpdate;
+    }
     public List<Alert> getAllAlerts() {
         return alertRepository.findAll();
     }
