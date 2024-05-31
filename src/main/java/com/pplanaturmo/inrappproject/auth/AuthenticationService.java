@@ -91,6 +91,8 @@ public class AuthenticationService {
                 .rangeInr(user.getRangeInr() != null ? user.getRangeInr().getId() : null)
                 .dosePattern(user.getDosePattern() != null ? user.getDosePattern().getId() : null)
                 .role(user.getUserRole())
+                .email(user.getEmail())
+                .dataConsent(user.getDataConsent())
                 .build();
     }
 /*
@@ -150,6 +152,8 @@ public class AuthenticationService {
                 .rangeInr(user.getRangeInr() != null ? user.getRangeInr().getId() : null)
                 .dosePattern(user.getDosePattern() != null ? user.getDosePattern().getId() : null)
                 .role(user.getUserRole())
+                .email(user.getEmail())
+                .dataConsent(user.getDataConsent())
                 .build();
     }
 

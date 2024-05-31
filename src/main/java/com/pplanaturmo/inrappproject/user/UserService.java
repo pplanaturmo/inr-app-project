@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.pplanaturmo.inrappproject.dosePattern.DosePatternController;
+import com.pplanaturmo.inrappproject.user.dtos.UpdateUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -143,6 +144,19 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
         return user;
+    }
+
+    public void updateUser(User user, UpdateUserRequest updateUserRequest) {
+
+
+        user.setName(updateUserRequest.getName());
+        user.setSurname(updateUserRequest.getSurname());
+        user.setEmail(updateUserRequest.getEmail());
+        RangeInr newRange = rangeInrRepository.getReferenceById(updateUserRequest.getRangeInr());
+        user.setRangeInr(newRange);
+        DosePattern newPattern = dosePatternRepository.getReferenceById(updateUserRequest.getDosePattern());
+        user.setDosePattern(newPattern);
+        userRepository.save(user);
     }
 
     public User assignDepartmentToUser(Long userId, Long department_id) {

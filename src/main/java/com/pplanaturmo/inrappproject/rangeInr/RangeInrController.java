@@ -27,4 +27,17 @@ public class RangeInrController {
     public List<RangeInr> getAllRangeInrs() {
         return rangeInrService.getAllRangeInrs();
     }
+
+    @GetMapping("/rangeInr/{id}")
+    @Operation(summary = "Obtener un rango de INR por ID", description = "Recuperar un Rango de INR específico por su ID", responses = {
+            @ApiResponse(responseCode = "200", description = "Rango de INR recuperado con éxito", content = @Content(schema = @Schema(implementation = RangeInr.class))),
+            @ApiResponse(responseCode = "404", description = "Rango de INR no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno de servidor")
+    })
+    public RangeInr getRangeInrById(@PathVariable Long id) {
+        return rangeInrService.getRangeInrById(id);
+
+    }
+
+
 }

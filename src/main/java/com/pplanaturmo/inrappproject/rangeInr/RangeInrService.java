@@ -20,4 +20,7 @@ public class RangeInrService {
       public List<RangeInr> getAllRangeInrs() {
         return rangeInrRepository.findAll();
     }
+    public RangeInr getRangeInrById(Long id){
+          return rangeInrRepository.getReferenceById(id);
+    }
 }

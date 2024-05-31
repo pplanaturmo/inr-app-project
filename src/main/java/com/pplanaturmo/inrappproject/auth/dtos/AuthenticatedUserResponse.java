@@ -47,10 +47,15 @@ public class AuthenticatedUserResponse {
     @Schema(description = "ID del patrón de dosificación del usuario")
     private Long dosePattern;
 
-    @Schema(description = "Listado de roles del usuario")
+    @Schema(description = "Rol del usuario")
     private String role;
 
-    // @Schema(description = "Listado de roles del usuario")
-    // private Role role;
+    @Schema(description = "Correo electrónico del usuario")
+    private String email;
+
+    @Schema(description = "Correo electrónico del usuario")
+    private Boolean dataConsent;
+
+
 
 }

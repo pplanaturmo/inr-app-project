@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Schema(description = "DTO validación de creacióin de usuario")
+@Schema(description = "DTO validación de creación de usuario")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,7 +37,7 @@ public class UserRequest {
     @Email(message = "A valid email is required")
     private String email;
 
-    @Schema(description = "Id el rango INR  del usuario recibido")
+    @Schema(description = "Id del rango INR  del usuario recibido")
     @NumberFormat
     @NotNull
     private Long rangeInr;

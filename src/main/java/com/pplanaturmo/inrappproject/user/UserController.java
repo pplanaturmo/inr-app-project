@@ -2,6 +2,7 @@ package com.pplanaturmo.inrappproject.user;
 
 import java.util.List;
 
+import com.pplanaturmo.inrappproject.user.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,13 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.pplanaturmo.inrappproject.user.dtos.UpdateUserDepartment;
-import com.pplanaturmo.inrappproject.user.dtos.UpdateUserInrRange;
-import com.pplanaturmo.inrappproject.user.dtos.UpdateUserPattern;
-import com.pplanaturmo.inrappproject.user.dtos.UpdateUserRole;
-import com.pplanaturmo.inrappproject.user.dtos.UpdateUserSupervisor;
-import com.pplanaturmo.inrappproject.user.dtos.UserRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -84,11 +78,11 @@ public class UserController {
         })
         public User updateUser(
                         @Parameter(description = "ID del usuario a actualizar", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
-                        @Parameter(description = "Objeto para validar datos de actualización de usuario", required = true) @Valid @RequestBody UserRequest createUserRequest) {
+                        @Parameter(description = "Objeto para validar datos de actualización de usuario", required = true) @Valid @RequestBody UpdateUserRequest updateUserRequest) {
+                User user = userService.getUserById(userId);
+                userService.updateUser(user, updateUserRequest);
 
-                User user = userService.convertToUser(createUserRequest);
-                user.setId(userId);
-                return userService.updateUser(user);
+                return userService.getUserById(userId);
         }
 
         @PutMapping("/{userId}/department")
