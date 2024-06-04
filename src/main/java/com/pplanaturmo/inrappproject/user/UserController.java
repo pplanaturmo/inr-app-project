@@ -2,6 +2,8 @@ package com.pplanaturmo.inrappproject.user;
 
 import java.util.List;
 
+import com.pplanaturmo.inrappproject.auth.dtos.AuthenticatedUserResponse;
+import com.pplanaturmo.inrappproject.auth.token.JwtService;
 import com.pplanaturmo.inrappproject.user.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,6 +35,9 @@ public class UserController {
 
         @Autowired
         private UserService userService;
+
+        @Autowired
+        private JwtService jwtService;
 
         @PostMapping("/create")
         @Operation(summary = "Crear nuevo usuario", description = "Este endpoint permite la creación de un nuevo usuario a traves de los datos recibidos.", responses = {
@@ -76,13 +81,30 @@ public class UserController {
                         @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
         })
-        public User updateUser(
+        public AuthenticatedUserResponse updateUser(
                         @Parameter(description = "ID del usuario a actualizar", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
                         @Parameter(description = "Objeto para validar datos de actualización de usuario", required = true) @Valid @RequestBody UpdateUserRequest updateUserRequest) {
                 User user = userService.getUserById(userId);
                 userService.updateUser(user, updateUserRequest);
 
-                return userService.getUserById(userId);
+                var jwtToken = jwtService.generateToken(user);
+                var refreshToken = jwtService.generateRefreshToken(user);
+
+               // return userService.getUserById(userId);
+                return AuthenticatedUserResponse.builder()
+                        .accessToken(jwtToken)
+                        .refreshToken(refreshToken)
+                        .id(user.getId())
+                        .name(user.getName())
+                        .surname(user.getSurname())
+                        .department(user.getDepartment() != null ? user.getDepartment().getId() : null)
+                        .supervisor(user.getSupervisor() != null ? user.getSupervisor().getId() : null)
+                        .rangeInr(user.getRangeInr() != null ? user.getRangeInr().getId() : null)
+                        .dosePattern(user.getDosePattern() != null ? user.getDosePattern().getId() : null)
+                        .role(user.getUserRole())
+                        .email(user.getEmail())
+                        .dataConsent(user.getDataConsent())
+                        .build();
         }
 
         @PutMapping("/{userId}/department")

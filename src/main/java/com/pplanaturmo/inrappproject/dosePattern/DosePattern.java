@@ -41,8 +41,8 @@ public class DosePattern {
     private DrugTypeEnum drug;
 
     public enum DrugTypeEnum {
-        SINTROM_4_WARFARINA_10,
-        SINTROM_1_WARFARINA_1_3_5
+        SINTROM_4,
+        SINTROM_1
     }
 
     public DosePattern(Integer level, Double[] patternValue, DrugTypeEnum drug) {

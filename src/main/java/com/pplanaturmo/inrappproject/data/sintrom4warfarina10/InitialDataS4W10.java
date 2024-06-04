@@ -24,7 +24,7 @@ public class InitialDataS4W10 {
 
         List<DosePattern> patterns = new ArrayList<>();
 
-        DrugTypeEnum s4w10 = DrugTypeEnum.SINTROM_4_WARFARINA_10;
+        DrugTypeEnum s4w10 = DrugTypeEnum.SINTROM_4;
 
         patterns.add(new DosePattern(1, new Double[] { 0.0, 0.0, 0.125 }, s4w10));
         patterns.add(new DosePattern(2, new Double[] { 0.0, 0.125 }, s4w10));
