@@ -19,4 +19,5 @@ public interface ExpectedMeasurementDateRepository extends JpaRepository<Expecte
 
     Optional<ExpectedMeasurementDate> findTopByUserIdOrderByExpectedDateDesc(Long userId);
 
+    Optional<ExpectedMeasurementDate> findTopByUserIdOrderByCreatedAtDesc(Long userId);
 }

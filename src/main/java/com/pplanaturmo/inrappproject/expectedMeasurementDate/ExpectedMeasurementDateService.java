@@ -3,6 +3,7 @@ package com.pplanaturmo.inrappproject.expectedMeasurementDate;
 import java.time.LocalDate;
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +23,14 @@ public class ExpectedMeasurementDateService {
 
         ExpectedMeasurementDate newExpectedMeasurementDate = new ExpectedMeasurementDate();
         LocalDate currentDate = LocalDate.now();
-        boolean seeDoctor = value > TOO_DANGEROUS_VALUE;
+        boolean contactDoctorAsap = value > TOO_DANGEROUS_VALUE;
+        if(contactDoctorAsap){
+            user.setDosePattern(null);
+        }
         newExpectedMeasurementDate.setUser(user);
         newExpectedMeasurementDate.setExpectedDate(currentDate.plusDays(days));
         newExpectedMeasurementDate.setFulfilled(false);
-        newExpectedMeasurementDate.setContactDoctorASAP(seeDoctor);
+        newExpectedMeasurementDate.setContactDoctorASAP(contactDoctorAsap);
         saveExpectedMeasurementDate(newExpectedMeasurementDate);
     }
 
@@ -63,7 +67,8 @@ public class ExpectedMeasurementDateService {
     }
 
     public ExpectedMeasurementDate getLastExpectedMeasurementDateByUserId(Long userId) {
-        return expectedMeasurementDateRepository.findTopByUserIdOrderByExpectedDateDesc(userId).orElse(null);
+       // return expectedMeasurementDateRepository.findTopByUserIdOrderByExpectedDateDesc(userId).orElse(null);
+        return expectedMeasurementDateRepository.findTopByUserIdOrderByCreatedAtDesc(userId).orElse(null);
     }
 
 }

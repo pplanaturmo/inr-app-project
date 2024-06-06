@@ -62,7 +62,7 @@ public class ExpectedMeasurementDateController {
         return ResponseEntity.ok(expectedMeasurementDateService.findByUserId(userId));
     }
 
-    @Operation(summary = "Obtener fechas previstas de medición por estado de cumplimiento", description = "Recuperar fechas previstas de medición por el estado de cumplimiento.", responses = {
+    @Operation(summary = "Obtener fechas previstas de medición por cumplimiento", description = "Recuperar fechas previstas de medición por el cumplimiento.", responses = {
             @ApiResponse(responseCode = "200", description = "Listado de fechas previstas de medición recuperado con éxito"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
@@ -72,8 +72,8 @@ public class ExpectedMeasurementDateController {
         return ResponseEntity.ok(expectedMeasurementDateService.findByFulfilled(fulfilled));
     }
 
-    @Operation(summary = "Obtener fechas previstas de medición con fechas desajustadas", description = "Recuperar fechas previstas de medición con fechas desajustadas.", responses = {
-            @ApiResponse(responseCode = "200", description = "Listado de fechas previstas de medición con fechas desajustadas recuperado con éxito")
+    @Operation(summary = "Obtener fechas previstas de medición con fecha esperada y cumplida no coincidentes", description = "Recuperar fechas previstas de medición con fecha esperada y cumplida no coincidentes.", responses = {
+            @ApiResponse(responseCode = "200", description = "Listado de fechas previstas de medición con ffecha esperada y cumplida no coincidentes recuperado con éxito")
     })
     @GetMapping("/mismatched-dates")
     public ResponseEntity<List<ExpectedMeasurementDate>> getExpectedMeasurementDatesWithMismatchedDates() {
