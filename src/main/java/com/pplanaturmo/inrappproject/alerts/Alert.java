@@ -2,6 +2,7 @@ package com.pplanaturmo.inrappproject.alerts;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -28,6 +29,7 @@ public class Alert {
 
     @Schema(description = "Identificador único de la medición que provoca la alerta")
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "measurement_id", referencedColumnName = "id")
     private Measurement measurement;
 
