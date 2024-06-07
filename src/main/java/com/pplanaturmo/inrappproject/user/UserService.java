@@ -159,6 +159,15 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public User assignPasswordToUser(Long userId, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        return userRepository.save(user);
+    }
+
     public User assignDepartmentToUser(Long userId, Long department_id) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));

@@ -90,7 +90,7 @@ public class UserController {
                 var jwtToken = jwtService.generateToken(user);
                 var refreshToken = jwtService.generateRefreshToken(user);
 
-               // return userService.getUserById(userId);
+
                 return AuthenticatedUserResponse.builder()
                         .accessToken(jwtToken)
                         .refreshToken(refreshToken)
@@ -105,6 +105,20 @@ public class UserController {
                         .email(user.getEmail())
                         .dataConsent(user.getDataConsent())
                         .build();
+        }
+
+        @PutMapping("/{userId}/password")
+        @Operation(summary = "Asignar nueva contraseña a usuario", description = "Se asigna una nueva contraseña a la cuenta de usuario", responses = {
+                @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente", content = @Content(schema = @Schema(implementation = User.class))),
+                @ApiResponse(responseCode = "400", description = "Datos recibidos no validos"),
+                @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+                @ApiResponse(responseCode = "500", description = "Error interno de servidor")
+        })
+        public User assignPasswordToUser(
+                @Parameter(description = "ID del usuario al que se le asigna nueva contraseña", required = true) @PathVariable("userId") @Valid @NotNull Long userId,
+                @Parameter(description = "Objeto para validar datos de actualización de contraseña", required = true) @RequestBody @Valid UpdatePassword updatePassword) {
+
+                return userService.assignPasswordToUser(userId, updatePassword.getNewPassword());
         }
 
         @PutMapping("/{userId}/department")

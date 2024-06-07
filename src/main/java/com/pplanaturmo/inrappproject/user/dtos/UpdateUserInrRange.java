@@ -18,13 +18,11 @@ public class UpdateUserInrRange {
     @Schema(description = "ID del usuario a actualizar")
     @NumberFormat
     @NotNull(message = "User id is required")
-    @NotBlank(message = "User id is required")
     private Long userId;
 
     @Schema(description = "ID del rango terapeútico a asignar")
     @NumberFormat
     @NotNull(message = "Range Id is required")
-    @NotBlank(message = "Range Id is required")
     private Long rangeId;
 
 }

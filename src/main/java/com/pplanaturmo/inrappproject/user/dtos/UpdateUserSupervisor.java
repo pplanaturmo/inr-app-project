@@ -18,13 +18,11 @@ public class UpdateUserSupervisor {
     @Schema(description = "ID del usuario a actualizar")
     @NumberFormat
     @NotNull(message = "User id is required")
-    @NotBlank(message = "User id is required")
     private Long userId;
 
     @Schema(description = "ID del profesional a asignar")
     @NumberFormat
     @NotNull(message = "Professional Id is required")
-    @NotBlank(message = "Professional Id is required")
     private Long professionalId;
 
 }

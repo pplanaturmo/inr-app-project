@@ -18,13 +18,11 @@ public class UpdateUserPattern {
     @Schema(description = "ID del usuario a actualizar")
     @NumberFormat
     @NotNull(message = "User id is required")
-    @NotBlank(message = "User id is required")
     private Long userId;
 
     @Schema(description = "ID del patrón de dosificación a asignar")
     @NumberFormat
     @NotNull(message = "Pattern Id is required")
-    @NotBlank(message = "Pattern Id is required")
     private Long patternId;
 
 }
