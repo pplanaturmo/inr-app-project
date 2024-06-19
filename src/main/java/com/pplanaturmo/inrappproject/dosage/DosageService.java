@@ -2,6 +2,7 @@ package com.pplanaturmo.inrappproject.dosage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,7 +102,7 @@ public class DosageService {
 
         final Double SKIP_FIRST_DOSE = 5.0;
         final Double NO_DOSAGES = 7.0;
-
+        System.out.println(Arrays.toString(measurement.getDosagesValuesList())+"createDosagesbyMeasurement");
         Double[] dosagesList = measurement.getDosagesValuesList();
         Double value = measurement.getValue();
 
@@ -185,7 +186,7 @@ public class DosageService {
                 existingDosage.setDoseValue(measurement.getValue());
                 updateDosage(existingDosage);
             } else {
-                saveDosage(measurement, dosageDate, dosagesList[i]);
+                saveDosage(measurement, dosageDate, dosagesList[i -1]);
             }
 
         }

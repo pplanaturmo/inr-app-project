@@ -1,6 +1,7 @@
 package com.pplanaturmo.inrappproject.measurement;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -106,7 +107,7 @@ public class MeasurementController {
                         @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
                         @ApiResponse(responseCode = "500", description = "Error interno de servidor")
         })
-        public Measurement findLatestMeasurementByUserId(
+        public Optional<Measurement> findLatestMeasurementByUserId(
                         @Parameter(description = "ID del usuario del que se quiere obtener la última medida", required = true) @PathVariable("userId") @Valid @NotNull Long userId) {
                 return measurementService.findLatestMeasurementByUserId(userId);
         }

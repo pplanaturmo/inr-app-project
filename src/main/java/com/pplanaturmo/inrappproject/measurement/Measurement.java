@@ -48,7 +48,7 @@ public class Measurement {
 
     @Schema(description = "Patrón de dosificación recomendado")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recommended_pattern", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "recommended_pattern", referencedColumnName = "id", nullable = true)
     private DosePattern recommendedPattern;
 
     @Schema(description = "Alerta relacionada con la medición")
